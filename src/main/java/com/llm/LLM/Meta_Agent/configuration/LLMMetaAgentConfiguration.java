@@ -16,7 +16,7 @@ public class LLMMetaAgentConfiguration {
 	
 	public LLMMetaAgentConfiguration(OpenAiConnectionProperties con) {
 		this.API_KEY=con.getApiKey();
-		this.BASE_URL=con.getBaseUrl();
+		this.BASE_URL=con.getBaseUrl();System.out.println(BASE_URL+API_KEY);
 	}
 	
 	@Bean
