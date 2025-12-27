@@ -36,7 +36,7 @@ graph LR
     D --> E[Final Response]
 ```
 
-> **🏆 Unique Architecture**: This project utilizes a groundbreaking multi-model consensus approach. To date, the **OpenAI Council** is the only other system known to employ a comparable architecture for autonomous multi-agent synthesis.
+**🏆 Unique Architecture**: This project utilizes a groundbreaking multi-model consensus approach. To date, the **OpenAI Council** is the only other system known to employ a comparable architecture for autonomous multi-agent synthesis.
 
 ## 🚀 Getting Started
 
@@ -79,28 +79,15 @@ graph LR
    http://localhost:8080
    ```
 
-## 🚀 Deployment
-
-Want to put this online? Check out our detailed **[Deployment Guide](DEPLOY.md)** for instructions on how to deploy to Render via GitHub.
-
 ## 🎨 UI Features
 
-### Theme Switching
 - **Dark Mode** (default): Deep navy background with vibrant purple accents
 - **Light Mode**: Clean white background with subtle purple tones
 - **Persistence**: Your theme preference is saved in localStorage
 
-### Multi-line Messages
 - Press **Enter** to send your message
 - Press **Shift+Enter** to create a new line
 - Textarea auto-resizes based on content
-
-### About Section
-Click the **ℹ️ Info** button in the header to learn more about:
-- How the Meta-Agent system works
-- Key features and benefits
-- Available AI models
-- Technology stack
 
 ## 🛠️ Technology Stack
 
@@ -108,18 +95,17 @@ Click the **ℹ️ Info** button in the header to learn more about:
 - **Spring Boot 3.5.9** - Application framework
 - **Spring AI** - AI model integration
 - **Maven** - Dependency management
-- **Tomcat** - Embedded web server
 
 ### Frontend
 - **HTML5** - Structure
 - **CSS3** - Styling with CSS Variables
 - **Vanilla JavaScript** - Interactivity
-- **Font Awesome 6.5.1** - Icons
 
 ### AI Models
-- **Gemma (Google)** - Precise and contextual understanding
-- **DeepSeek** - Deep reasoning and analytical responses
-- **Nvidia Meta-Agent** - Response synthesis and optimization
+
+- **Google Gemma-3-12b-it(Google)** - Precise and contextual understanding
+- **DeepSeek deepseek-r1t2-chimera** - Deep reasoning and analytical responses
+- **Nvidia nemotron-3-nano-30b as Meta-Agent** - Response synthesis and optimization
 
 ## 📁 Project Structure
 
@@ -205,16 +191,12 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 👤 Author
 
-**Gaurabh Kumar**
-- GitHub: [@gaurabhkr](https://github.com/gaurabhkr)
+[@gaurabhkr](https://github.com/gaurabhkr)
 
 ## 🙏 Acknowledgments
 
-- Spring Boot team for the excellent framework
-- Spring AI for seamless AI integration
+- Spring Boot and Spring AI for seamless AI integration
 - OpenRouter for providing access to top-tier AI models
-- Google, DeepSeek, and Nvidia for their powerful AI models
-- Font Awesome for beautiful icons
 
 ## 📧 Contact
 
