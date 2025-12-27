@@ -16,7 +16,9 @@ An advanced AI system that combines the power of multiple language models to del
 - **💬 Multi-line Input**: Support for complex queries with Shift+Enter
 - **🎭 Animated Doodles**: Decorative background elements for enhanced visual appeal
 
-
+## 🌐 Live Demo
+Experience the application live: **[https://llm-meta-agent.onrender.com/](https://llm-meta-agent.onrender.com/)**
+*(Note: Initial load may take a minute on the free tier)*
 
 ## 🏗️ Architecture
 
