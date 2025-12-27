@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Meta-Agent</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Decorative Background Doodles -->
+    <div class="bg-doodles">
+        <svg class="doodle doodle-1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M45.3,-57.5C57.9,-47.3,66.8,-32.3,70.4,-16.1C74,0.1,72.3,17.4,64.4,31.6C56.5,45.8,42.4,57,26.8,62.8C11.2,68.6,-5.9,69,-21.4,63.8C-36.9,58.6,-50.8,47.8,-59.5,33.8C-68.2,19.8,-71.7,2.6,-68.4,-13.3C-65.1,-29.2,-55,-43.8,-42.3,-54C-29.6,-64.2,-14.8,-69.9,0.7,-70.8C16.2,-71.7,32.7,-67.7,45.3,-57.5Z"
+                transform="translate(100 100)" />
+        </svg>
+        <svg class="doodle doodle-2" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M39.5,-55.3C49.8,-43.4,56.3,-29.7,59.7,-15.3C63.1,-0.9,63.4,14.1,57.5,26.3C51.6,38.5,39.5,47.9,26.3,54.1C13.1,60.3,-1.2,63.3,-14.8,60.1C-28.4,56.9,-41.3,47.5,-50.5,35.1C-59.7,22.7,-65.2,7.3,-64.4,-7.7C-63.6,-22.7,-56.5,-37.3,-45.8,-49C-35.1,-60.7,-21.8,-69.5,-7.3,-70.8C7.2,-72.1,29.2,-67.2,39.5,-55.3Z"
+                transform="translate(100 100)" />
+        </svg>
+        <svg class="doodle doodle-3" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="50" fill="none" stroke-width="2" opacity="0.3" />
+            <circle cx="100" cy="100" r="70" fill="none" stroke-width="1" opacity="0.2" />
+        </svg>
+        <svg class="doodle doodle-4" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <rect x="50" y="50" width="100" height="100" rx="15" fill="none" stroke-width="2" opacity="0.25" />
+        </svg>
+        <svg class="doodle doodle-5" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="100,30 130,70 170,70 140,100 160,140 100,110 40,140 60,100 30,70 70,70" fill="none"
+                stroke-width="1.5" opacity="0.3" />
+        </svg>
+        <svg class="doodle doodle-6" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <path d="M30,100 Q60,50 100,70 T170,100" fill="none" stroke-width="2" opacity="0.25" />
+            <path d="M30,110 Q60,160 100,140 T170,110" fill="none" stroke-width="2" opacity="0.25" />
+        </svg>
+    </div>
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-sparkles logo-icon"></i>
+                <h1>LLM <span class="highlight">Meta-Agent</span></h1>
+            </div>
+            <div class="header-controls">
+                <div class="model-selector">
+                    <label for="model-select"><i class="fas fa-robot"></i> Select Intelligence:</label>
+                    <div class="select-wrapper">
+                        <select id="model-select">
+                            <option value="nvidia" data-icon="fa-layer-group">🧠 Meta-Agent (Nvidia)</option>
+                            <option value="gemma" data-icon="fa-gem">💎 Gemma (Google)</option>
+                            <option value="deepseek" data-icon="fa-compass">🧭 DeepSeek</option>
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                    <i class="fas fa-sun"></i>
+                </button>
+                <button id="about-btn" class="about-btn" aria-label="About">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- About Modal -->
+        <div id="about-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-sparkles"></i> LLM Meta-Agent</h2>
+                    <button class="modal-close" id="modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="modal-intro">
+                        An advanced AI system that combines the power of multiple language models to deliver superior,
+                        well-rounded responses.It uses a large language model (LLM) as its central brain to autonomously
+                        design, optimize, and manage a system of other specialized AI agents.
+                    </p>
+
+                    <h3><i class="fas fa-layer-group"></i> How It Works</h3>
+                    <p>
+                        The Meta-Agent employs a sophisticated multi-model approach where it consults both
+                        <strong>Gemma (Google)</strong> and <strong>DeepSeek</strong> AI models simultaneously.
+                        These individual responses are then synthesized by the <strong>Meta-Agent (Nvidia)</strong>
+                        to produce a comprehensive, accurate, and content-rich final answer.
+                    </p>
+
+                    <h3><i class="fas fa-brain"></i> Key Features</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> <strong>Multi-Model Intelligence:</strong> Leverages
+                            insights from multiple AI models</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>Enhanced Accuracy:</strong> Cross-validates
+                            responses for better reliability</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>Comprehensive Answers:</strong> Combines
+                            perspectives for richer content</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>Transparent Process:</strong> View individual
+                            model inputs in real-time</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>Flexible Selection:</strong> Choose between
+                            meta-synthesis or direct model access</li>
+                    </ul>
+
+                    <h3><i class="fas fa-cogs"></i> Available Models</h3>
+                    <div class="model-cards">
+                        <div class="model-card">
+                            <div class="model-icon">🧠</div>
+                            <h4>Meta-Agent (Nvidia)</h4>
+                            <p>Synthesizes responses from Gemma and DeepSeek for optimal accuracy and comprehensiveness.
+                            </p>
+                        </div>
+                        <div class="model-card">
+                            <div class="model-icon">💎</div>
+                            <h4>Gemma (Google)</h4>
+                            <p>Google's powerful language model known for precise and contextual understanding.</p>
+                        </div>
+                        <div class="model-card">
+                            <div class="model-icon">🧭</div>
+                            <h4>DeepSeek</h4>
+                            <p>Advanced AI model specializing in deep reasoning and analytical responses.</p>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <p><i class="fas fa-code"></i> Built with Spring Boot & Spring AI</p>
+                        <!-- TODO: Replace YOUR_GITHUB_USERNAME and YOUR_REPO_NAME with your actual GitHub repository details -->
+                        <a href="https://github.com/gaurabhkr" target="_blank" class="github-link">
+                            <i class="fab fa-github"></i> View on GitHub
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main>
+            <div class="chat-interface">
+                <!-- Chat Background Doodles -->
+                <div class="chat-doodles">
+                    <svg class="chat-doodle chat-doodle-1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="100" cy="100" r="80" fill="none" stroke-width="1.5" opacity="0.4" />
+                    </svg>
+                    <svg class="chat-doodle chat-doodle-2" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M50,100 Q75,50 100,100 T150,100" fill="none" stroke-width="2" opacity="0.3" />
+                    </svg>
+                    <svg class="chat-doodle chat-doodle-3" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="100,50 120,90 160,100 120,110 100,150 80,110 40,100 80,90" fill="none"
+                            stroke-width="1.5" opacity="0.25" />
+                    </svg>
+                    <svg class="chat-doodle chat-doodle-4" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="60" y="60" width="80" height="80" rx="20" fill="none" stroke-width="1" opacity="0.2" />
+                    </svg>
+                </div>
+                <div id="chat-history" class="chat-history">
+                    <div class="welcome-message">
+                        <h2>Welcome to the Meta-Mind</h2>
+                        <p>Select a model and start a conversation. The Meta-Agent synthesizes insights from multiple
+                            sub-models.</p>
+                    </div>
+                </div>
+
+                <div class="input-area">
+                    <div class="input-wrapper">
+                        <textarea id="user-input" placeholder="Ask anything... (Shift+Enter for new line)"
+                            autocomplete="off" rows="1"></textarea>
+                        <button id="send-btn" aria-label="Send message">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <aside class="meta-insights" id="meta-insights-panel">
+                <h3>Meta-Agent Insights</h3>
+                <div class="insight-card">
+                    <h4>Gemma Input</h4>
+                    <div id="insight-gemma" class="insight-content waiting">Waiting for query...</div>
+                </div>
+                <div class="insight-card">
+                    <h4>DeepSeek Input</h4>
+                    <div id="insight-deepseek" class="insight-content waiting">Waiting for query...</div>
+                </div>
+            </aside>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
