@@ -25,13 +25,13 @@ Experience the application live: **[https://llm-meta-agent.onrender.com/](https:
 ### How It Works
 
 1. **User Input**: User submits a query through the web interface
-2. **Parallel Processing**: Query is sent to both Gemma (Google) and DeepSeek models
+2. **Parallel Processing**: Query is sent to both Mimo (Xiaomi) and DeepSeek models
 3. **Meta-Synthesis**: Nvidia Meta-Agent analyzes both responses
 4. **Final Answer**: Delivers a comprehensive, accurate response combining all insights
 
 ```mermaid
 graph LR
-    A[User Query] --> B[Gemma Model]
+    A[User Query] --> B[Mimo Model]
     A --> C[DeepSeek Model]
     B --> D[Meta-Agent Nvidia]
     C --> D
@@ -105,7 +105,7 @@ graph LR
 
 ### AI Models
 
-- **Google Gemma-3-12b-it(Google)** - Precise and contextual understanding
+- **Xiaomi mimo-v2-flash** - Precise and contextual understanding
 - **DeepSeek deepseek-r1t2-chimera** - Deep reasoning and analytical responses
 - **Nvidia nemotron-3-nano-30b as Meta-Agent** - Response synthesis and optimization
 
@@ -132,20 +132,20 @@ LLM-Meta-Agent/
 
 ### Main Endpoints
 
-- `GET /api/gemma/{message}` - Query Gemma model directly
+- `GET /api/mimo/{message}` - Query Mimo model directly
 - `GET /api/deepseek/{message}` - Query DeepSeek model directly
 - `GET /api/nvidia/{message}` - Query Meta-Agent (synthesized response)
 
 ### Meta-Agent Insights
 
-- `GET /api/nvidia/firstmodelresponse` - Get Gemma's response from last query
+- `GET /api/nvidia/firstmodelresponse` - Get Mimo's response from last query
 - `GET /api/nvidia/secondmodelresponse` - Get DeepSeek's response from last query
 
 ## 🎯 Usage Examples
 
 ### Direct Model Query
 ```javascript
-fetch('/api/gemma/What is artificial intelligence?')
+fetch('/api/mimo/What is artificial intelligence?')
   .then(response => response.text())
   .then(data => console.log(data));
 ```
