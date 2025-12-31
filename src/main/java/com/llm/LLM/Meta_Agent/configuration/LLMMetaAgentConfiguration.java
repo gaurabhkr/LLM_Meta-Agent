@@ -1,4 +1,4 @@
-package com.llm.LLM.Meta_Agent.configuration;
+package com.llm.LLM.Meta_Agent.Configuration;
 
 import org.springframework.ai.model.openai.autoconfigure.OpenAiConnectionProperties;
 import org.springframework.ai.openai.OpenAiChatModel;
@@ -20,11 +20,11 @@ public class LLMMetaAgentConfiguration {
 	}
 	
 	@Bean
-	@Qualifier("gemma")
-	public OpenAiChatModel gemmamodel() {
+	@Qualifier("mimo")
+	public OpenAiChatModel mimomodel() {
 		
 		//Making option for custom model and openaiapi they will make an openaichatmodel which is load into chatclient
-		var options=OpenAiChatOptions.builder().model("google/gemma-3-12b-it:free").build();
+		var options=OpenAiChatOptions.builder().model("xiaomi/mimo-v2-flash:free").build();
 		var openaiapi=OpenAiApi.builder().apiKey(API_KEY).baseUrl(BASE_URL).build();
 		
 		return OpenAiChatModel
@@ -66,10 +66,10 @@ public class LLMMetaAgentConfiguration {
 	}
 // Not using 
 //	@Bean
-//	@Qualifier("gpt")
-//	private OpenAiChatModel gptmodel() {
+//	@Qualifier("mistralai")
+//	private OpenAiChatModel mistralmodel() {
 //		
-//		var options=OpenAiChatOptions.builder().model("").build();
+//		var options=OpenAiChatOptions.builder().model("mistralai/devstral-2512:free").build();
 //		var openaiapi=OpenAiApi.builder().apiKey(API_KEY).baseUrl(API_KEY).build();
 //		
 //		return OpenAiChatModel

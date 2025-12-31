@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,21 +8,1983 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Dark Theme (default) */
+        :root {
+            --bg-color: #0f111a;
+            --card-bg: #1a1d2d;
+            --primary: #8b5cf6;
+            --primary-glow: rgba(139, 92, 246, 0.4);
+            --secondary: #06b6d4;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border-color: #2d3748;
+            --chat-user-bg: #2d3748;
+            --chat-ai-bg: #1a1d2d;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        /* Light Theme */
+        :root[data-theme="light"] {
+            --bg-color: #fafbfc;
+            --card-bg: #ffffff;
+            --primary: #8b5cf6;
+            --primary-glow: rgba(139, 92, 246, 0.2);
+            --secondary: #14b8a6;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #f3f4f6;
+            --chat-user-bg: linear-gradient(135deg, #8b5cf6, #a78bfa);
+            --chat-ai-bg: #f9fafb;
+            --shadow: rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated Background Gradient */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 50%, rgba(139, 92, 246, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            animation: gradientShift 15s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat 8s infinite;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 1s; }
+        .particle:nth-child(3) { left: 30%; animation-delay: 2s; }
+        .particle:nth-child(4) { left: 40%; animation-delay: 3s; }
+        .particle:nth-child(5) { left: 50%; animation-delay: 4s; }
+        .particle:nth-child(6) { left: 60%; animation-delay: 5s; }
+        .particle:nth-child(7) { left: 70%; animation-delay: 6s; }
+        .particle:nth-child(8) { left: 80%; animation-delay: 7s; }
+        .particle:nth-child(9) { left: 90%; animation-delay: 0.5s; }
+        .particle:nth-child(10) { left: 15%; animation-delay: 2.5s; }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Background Doodles */
+        .bg-doodles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        :root[data-theme="light"] .bg-doodles {
+            opacity: 1;
+        }
+
+        .doodle {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            fill: #8b5cf6;
+            opacity: 0.08;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        :root[data-theme="light"] .doodle {
+            opacity: 0.15;
+        }
+
+        .doodle-1 { top: 10%; right: 10%; animation-delay: 0s; }
+        .doodle-2 { bottom: 15%; left: 5%; animation-delay: -7s; width: 250px; height: 250px; }
+        .doodle-3 { top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: -14s; width: 400px; height: 400px; stroke: #14b8a6; }
+        .doodle-4 { top: 20%; left: 15%; animation-delay: -5s; width: 180px; height: 180px; stroke: #8b5cf6; }
+        .doodle-5 { bottom: 25%; right: 20%; animation-delay: -10s; width: 220px; height: 220px; stroke: #14b8a6; }
+        .doodle-6 { top: 60%; left: 25%; animation-delay: -17s; width: 200px; height: 200px; stroke: #8b5cf6; }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, -20px) rotate(5deg); }
+            50% { transform: translate(-10px, 10px) rotate(-3deg); }
+            75% { transform: translate(15px, 5px) rotate(2deg); }
+        }
+
+        .app-container {
+            max-width: 1600px;
+            width: 100%;
+            margin: 0 auto;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: rgba(26, 29, 45, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px var(--shadow);
+            animation: slideDown 0.6s ease-out;
+            position: relative;
+            z-index: 100;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        :root[data-theme="light"] header {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 5px 10px;
+            border-radius: 10px;
+            margin: -5px -10px;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .logo:active {
+            transform: scale(0.98);
+        }
+
+        .logo-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+            animation: pulse-icon 2s ease-in-out infinite, sparkle 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-icon {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { filter: drop-shadow(0 0 2px var(--primary)); }
+            50% { filter: drop-shadow(0 0 10px var(--primary)) drop-shadow(0 0 20px var(--primary)); }
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            animation: textGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes textGlow {
+            0%, 100% { text-shadow: none; }
+            50% { text-shadow: 0 0 20px var(--primary-glow); }
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: gradientText 4s ease infinite;
+        }
+
+        @keyframes gradientText {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .model-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .model-selector label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .model-selector label i {
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        /* Custom Select - shadcn/ui style */
+        .custom-select {
+            position: relative;
+            min-width: 240px;
+            z-index: 200;
+        }
+
+        .custom-select.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .select-trigger {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 10px 14px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            min-height: 44px;
+        }
+
+        .select-trigger:hover {
+            border-color: var(--primary);
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .select-trigger:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--primary-glow);
+        }
+
+        .select-trigger.open {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--primary-glow);
+        }
+
+        .select-trigger-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .select-trigger-icon {
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        .select-trigger-text {
+            font-weight: 500;
+        }
+
+        .select-trigger-arrow {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            transition: transform 0.2s ease;
+        }
+
+        .select-trigger.open .select-trigger-arrow {
+            transform: rotate(180deg);
+        }
+
+        .select-content {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px) scale(0.96);
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+        }
+
+        :root[data-theme="light"] .select-content {
+            box-shadow: 0 10px 40px rgba(139, 92, 246, 0.15);
+        }
+
+        .select-content.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .select-viewport {
+            padding: 4px;
+        }
+
+        .select-label {
+            padding: 8px 12px 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .select-separator {
+            height: 1px;
+            background: var(--border-color);
+            margin: 4px 0;
+        }
+
+        .select-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            position: relative;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+
+        .select-item:hover {
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .select-item:focus {
+            outline: none;
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .select-item.selected {
+            background: rgba(139, 92, 246, 0.15);
+        }
+
+        .select-item-icon {
+            font-size: 1.3rem;
+            line-height: 1;
+            width: 28px;
+            text-align: center;
+        }
+
+        .select-item-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .select-item-title {
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .select-item-description {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+
+        .select-item-check {
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.2s ease;
+        }
+
+        .select-item.selected .select-item-check {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .select-item-check i {
+            font-size: 0.85rem;
+        }
+
+        /* Item hover animation */
+        .select-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 0;
+            background: var(--primary);
+            border-radius: 0 2px 2px 0;
+            transition: height 0.2s ease;
+        }
+
+        .select-item:hover::before,
+        .select-item.selected::before {
+            height: 60%;
+        }
+
+        /* Keyboard navigation highlight */
+        .select-item.highlighted {
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        /* Hidden native select for form compatibility */
+        .native-select {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+            width: 0;
+            height: 0;
+        }
+
+        .theme-toggle, .about-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-toggle::before, .about-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--primary);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+            z-index: 0;
+        }
+
+        .theme-toggle:hover::before {
+            width: 100%;
+            height: 100%;
+        }
+
+        .about-btn:hover::before {
+            width: 100%;
+            height: 100%;
+            background: var(--secondary);
+        }
+
+        .theme-toggle:hover, .about-btn:hover {
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .theme-toggle i, .about-btn i {
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-toggle:hover i {
+            transform: rotate(360deg);
+        }
+
+        .about-btn:hover i {
+            animation: wobble 0.5s ease;
+        }
+
+        @keyframes wobble {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-15deg); }
+            75% { transform: rotate(15deg); }
+        }
+
+        .clear-chat-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .clear-chat-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: #ef4444;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+            z-index: 0;
+        }
+
+        .clear-chat-btn:hover::before {
+            width: 100%;
+            height: 100%;
+        }
+
+        .clear-chat-btn:hover {
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+        }
+
+        .clear-chat-btn i {
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .clear-chat-btn:hover i {
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-3px) rotate(-5deg); }
+            40% { transform: translateX(3px) rotate(5deg); }
+            60% { transform: translateX(-3px) rotate(-5deg); }
+            80% { transform: translateX(3px) rotate(5deg); }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 20px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px var(--shadow);
+            animation: slideUp 0.4s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        :root[data-theme="light"] .modal-content {
+            box-shadow: 0 10px 40px rgba(139, 92, 246, 0.15);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 30px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header h2 {
+            color: var(--text-main);
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .modal-header h2 i {
+            color: var(--primary);
+            font-size: 1.4rem;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 30px;
+            color: var(--text-main);
+        }
+
+        .modal-intro {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .modal-body h3 {
+            color: var(--text-main);
+            font-size: 1.2rem;
+            margin: 25px 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-body h3 i {
+            color: var(--primary);
+        }
+
+        .modal-body p {
+            line-height: 1.7;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0;
+        }
+
+        .feature-list li {
+            padding: 12px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .feature-list li:nth-child(1) { animation-delay: 0.1s; }
+        .feature-list li:nth-child(2) { animation-delay: 0.2s; }
+        .feature-list li:nth-child(3) { animation-delay: 0.3s; }
+        .feature-list li:nth-child(4) { animation-delay: 0.4s; }
+        .feature-list li:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feature-list li i {
+            color: var(--secondary);
+            margin-top: 4px;
+            font-size: 0.9rem;
+        }
+
+        .model-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .model-card {
+            background: rgba(139, 92, 246, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.15);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        :root[data-theme="light"] .model-card {
+            background: rgba(139, 92, 246, 0.03);
+            border: 1px solid rgba(139, 92, 246, 0.1);
+        }
+
+        .model-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 20px var(--primary-glow);
+            border-color: var(--primary);
+        }
+
+        .model-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .model-card:nth-child(2) .model-icon { animation-delay: -1s; }
+        .model-card:nth-child(3) .model-icon { animation-delay: -2s; }
+
+        .model-card h4 {
+            color: var(--text-main);
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .model-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .modal-footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .modal-footer p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .modal-footer i {
+            color: var(--primary);
+        }
+
+        .github-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .github-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .github-link:hover::before {
+            left: 100%;
+        }
+
+        .github-link:hover {
+            background: #7c3aed;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+
+        .github-link i {
+            font-size: 1.2rem;
+        }
+
+        /* Main Layout */
+        main {
+            flex: 1;
+            display: flex;
+            gap: 20px;
+            overflow: hidden;
+            animation: fadeInMain 0.8s ease-out 0.3s backwards;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes fadeInMain {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-interface {
+            flex: 2;
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .chat-interface:hover {
+            box-shadow: 0 8px 30px var(--shadow);
+        }
+
+        /* Chat Background Doodles */
+        .chat-doodles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .chat-doodle {
+            position: absolute;
+            stroke: var(--primary);
+            animation: floatChat 25s infinite ease-in-out;
+        }
+
+        .chat-doodle-1 { width: 200px; height: 200px; top: 10%; right: 8%; animation-delay: 0s; opacity: 0.06; }
+        .chat-doodle-2 { width: 180px; height: 180px; bottom: 20%; left: 5%; animation-delay: -8s; opacity: 0.05; }
+        .chat-doodle-3 { width: 150px; height: 150px; top: 45%; right: 15%; animation-delay: -15s; opacity: 0.04; }
+        .chat-doodle-4 { width: 140px; height: 140px; bottom: 10%; right: 25%; animation-delay: -20s; opacity: 0.03; }
+
+        :root[data-theme="light"] .chat-doodle { stroke: var(--secondary); opacity: 0.08; }
+        :root[data-theme="light"] .chat-doodle-1 { opacity: 0.1; }
+        :root[data-theme="light"] .chat-doodle-2 { opacity: 0.08; }
+        :root[data-theme="light"] .chat-doodle-3 { opacity: 0.06; }
+        :root[data-theme="light"] .chat-doodle-4 { opacity: 0.05; }
+
+        @keyframes floatChat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            25% { transform: translate(15px, -15px) rotate(3deg) scale(1.05); }
+            50% { transform: translate(-10px, 8px) rotate(-2deg) scale(0.98); }
+            75% { transform: translate(8px, 12px) rotate(1deg) scale(1.02); }
+        }
+
+        .chat-history {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-message {
+            text-align: center;
+            margin-top: 20%;
+            color: var(--text-muted);
+            animation: fadeInScale 0.8s ease-out;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .welcome-message h2 {
+            color: var(--text-main);
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: gradientText 4s ease infinite;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 15px 20px;
+            padding-left: 60px;
+            border-radius: 16px;
+            line-height: 1.6;
+            animation: messageSlide 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .message::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 12px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .message.user::before {
+            content: '👤';
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        :root[data-theme="light"] .message.user::before {
+            background: rgba(139, 92, 246, 0.15);
+        }
+
+        .message.ai::before {
+            content: '🤖';
+            background: var(--primary-glow);
+        }
+
+        :root[data-theme="light"] .message.ai::before {
+            background: rgba(20, 184, 166, 0.15);
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: var(--chat-user-bg);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        :root[data-theme="light"] .message.user {
+            color: white;
+        }
+
+        .message.ai {
+            align-self: flex-start;
+            background: rgba(139, 92, 246, 0.08);
+            border: 1px solid rgba(139, 92, 246, 0.15);
+            border-bottom-left-radius: 4px;
+        }
+
+        :root[data-theme="light"] .message.ai {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(20, 184, 166, 0.05));
+            border: 1px solid rgba(139, 92, 246, 0.1);
+            box-shadow: 0 2px 12px rgba(139, 92, 246, 0.08);
+        }
+
+        .message-header {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .message.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        /* Message Content HTML Styling */
+        .message-content {
+            line-height: 1.7;
+        }
+
+        .message-content p {
+            margin-bottom: 12px;
+        }
+
+        .message-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .message-content h1, 
+        .message-content h2, 
+        .message-content h3, 
+        .message-content h4, 
+        .message-content h5, 
+        .message-content h6 {
+            margin: 16px 0 8px 0;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .message-content h1 { font-size: 1.5rem; }
+        .message-content h2 { font-size: 1.3rem; }
+        .message-content h3 { font-size: 1.15rem; }
+        .message-content h4 { font-size: 1.05rem; }
+
+        .message-content ul, 
+        .message-content ol {
+            margin: 12px 0;
+            padding-left: 24px;
+        }
+
+        .message-content li {
+            margin-bottom: 6px;
+            line-height: 1.6;
+        }
+
+        .message-content strong, 
+        .message-content b {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .message-content em, 
+        .message-content i {
+            font-style: italic;
+        }
+
+        .message-content code {
+            background: rgba(139, 92, 246, 0.15);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9em;
+            color: var(--primary);
+        }
+
+        .message-content pre {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 12px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        :root[data-theme="light"] .message-content pre {
+            background: rgba(139, 92, 246, 0.08);
+        }
+
+        .message-content pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-main);
+        }
+
+        .message-content blockquote {
+            border-left: 3px solid var(--primary);
+            padding-left: 16px;
+            margin: 12px 0;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .message-content a {
+            color: var(--secondary);
+            text-decoration: underline;
+            transition: color 0.2s ease;
+        }
+
+        .message-content a:hover {
+            color: var(--primary);
+        }
+
+        .message-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+        }
+
+        .message-content th, 
+        .message-content td {
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        .message-content th {
+            background: rgba(139, 92, 246, 0.1);
+            font-weight: 600;
+        }
+
+        .message-content hr {
+            border: none;
+            border-top: 1px solid var(--border-color);
+            margin: 16px 0;
+        }
+
+        /* Insight Content HTML Styling */
+        .insight-content p {
+            margin-bottom: 8px;
+        }
+
+        .insight-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .insight-content strong {
+            color: var(--text-main);
+        }
+
+        .insight-content code {
+            background: rgba(139, 92, 246, 0.15);
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-size: 0.85em;
+        }
+
+        /* Input Area */
+        .input-area {
+            padding: 20px;
+            background-color: rgba(15, 17, 26, 0.5);
+            border-top: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .input-area.disabled {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 10px;
+            background: var(--bg-color);
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px var(--primary-glow);
+            transform: scale(1.01);
+        }
+
+        .input-wrapper.disabled {
+            background: rgba(45, 55, 72, 0.5);
+            cursor: not-allowed;
+        }
+
+        input, textarea {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-size: 1rem;
+            padding: 5px;
+            outline: none;
+            font-family: inherit;
+            resize: none;
+            max-height: 120px;
+            overflow-y: auto;
+            line-height: 1.5;
+        }
+
+        textarea:disabled {
+            cursor: not-allowed;
+        }
+
+        textarea::placeholder {
+            transition: color 0.3s ease;
+        }
+
+        button#send-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button#send-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease;
+        }
+
+        button#send-btn:hover::before {
+            width: 100%;
+            height: 100%;
+        }
+
+        button#send-btn:hover {
+            background: #7c3aed;
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        button#send-btn:active {
+            transform: scale(0.95);
+        }
+
+        button#send-btn svg {
+            width: 20px;
+            height: 20px;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
+        }
+
+        button#send-btn:hover svg {
+            transform: translateX(2px) rotate(15deg);
+        }
+
+        button#send-btn:disabled {
+            background: var(--border-color);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        button#send-btn:disabled:hover::before {
+            width: 0;
+            height: 0;
+        }
+
+        /* Sidebar */
+        aside.meta-insights {
+            flex: 1;
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 400px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px var(--shadow);
+            animation: slideInRight 0.6s ease-out 0.5s backwards;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        :root[data-theme="light"] aside.meta-insights {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.03), rgba(255, 255, 255, 1));
+            border: 1px solid rgba(139, 92, 246, 0.1);
+        }
+
+        aside h3 {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        aside h3::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+        }
+
+        .insight-card {
+            background: rgba(15, 17, 26, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        :root[data-theme="light"] .insight-card {
+            background: rgba(139, 92, 246, 0.04);
+            border: 1px solid rgba(139, 92, 246, 0.08);
+        }
+
+        .insight-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--primary-glow);
+            border-color: var(--primary);
+        }
+
+        .insight-card h4 {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .insight-card h4::before {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 6px;
+            background: var(--secondary);
+            border-radius: 50%;
+            box-shadow: 0 0 5px var(--secondary);
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .insight-content {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            white-space: pre-wrap;
+            overflow-y: auto;
+            flex: 1;
+            max-height: 200px;
+        }
+
+        .insight-content.waiting {
+            font-style: italic;
+            opacity: 0.5;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* Enhanced Thinking Animation */
+        .thinking-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 0;
+        }
+
+        .thinking-brain {
+            font-size: 1.5rem;
+            animation: thinkingBrain 1s ease-in-out infinite;
+        }
+
+        @keyframes thinkingBrain {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.1) rotate(-5deg); }
+            50% { transform: scale(1) rotate(0deg); }
+            75% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        .thinking-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .thinking-dots span {
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            animation: thinkingDot 1.4s ease-in-out infinite;
+        }
+
+        .thinking-dots span:nth-child(1) { animation-delay: 0s; }
+        .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes thinkingDot {
+            0%, 80%, 100% {
+                transform: scale(0.6);
+                opacity: 0.4;
+            }
+            40% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        .thinking-text {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            animation: fadeInOut 2s ease-in-out infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Neural Network Animation */
+        .neural-network {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: auto;
+        }
+
+        .neural-node {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: neuralPulse 0.8s ease-in-out infinite;
+        }
+
+        .neural-node:nth-child(1) { animation-delay: 0s; }
+        .neural-node:nth-child(2) { animation-delay: 0.15s; }
+        .neural-node:nth-child(3) { animation-delay: 0.3s; }
+        .neural-node:nth-child(4) { animation-delay: 0.45s; }
+        .neural-node:nth-child(5) { animation-delay: 0.6s; }
+
+        @keyframes neuralPulse {
+            0%, 100% {
+                transform: scale(1);
+                background: var(--primary);
+            }
+            50% {
+                transform: scale(1.5);
+                background: var(--secondary);
+            }
+        }
+
+        .pulse-text {
+            animation: pulseText 1.5s infinite;
+        }
+
+        @keyframes pulseText {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .app-container {
+                padding: 15px;
+            }
+            
+            aside.meta-insights {
+                max-width: 350px;
+            }
+            
+            .chat-history {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            main {
+                flex-direction: column;
+            }
+            
+            aside.meta-insights {
+                max-width: 100%;
+                order: -1;
+                max-height: 180px;
+                flex-direction: row;
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            aside.meta-insights h3 {
+                display: none;
+            }
+            
+            .insight-card {
+                flex: 1;
+                max-height: none;
+            }
+            
+            .insight-content {
+                max-height: 100px;
+            }
+            
+            header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+            
+            .header-controls {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+            
+            .model-selector {
+                flex-direction: column;
+                width: 100%;
+                gap: 10px;
+            }
+            
+            .model-selector label {
+                text-align: center;
+            }
+            
+            .custom-select {
+                width: 100%;
+                min-width: unset;
+            }
+            
+            .select-trigger {
+                width: 100%;
+            }
+            
+            .chat-interface {
+                min-height: 400px;
+            }
+            
+            .welcome-message {
+                margin-top: 10%;
+            }
+            
+            .welcome-message h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .app-container {
+                padding: 10px;
+            }
+            
+            header {
+                padding: 12px 15px;
+                border-radius: 12px;
+                margin-bottom: 10px;
+            }
+            
+            .logo h1 {
+                font-size: 1.2rem;
+            }
+            
+            .logo-icon {
+                font-size: 1.2rem;
+            }
+            
+            .message {
+                max-width: 95%;
+                padding: 12px 15px;
+                padding-left: 50px;
+                font-size: 0.9rem;
+            }
+            
+            .message::before {
+                width: 30px;
+                height: 30px;
+                left: 10px;
+                top: 10px;
+                font-size: 0.8rem;
+            }
+            
+            .modal-content {
+                width: 98%;
+                max-height: 90vh;
+                border-radius: 16px;
+            }
+            
+            .modal-header {
+                padding: 20px;
+            }
+            
+            .modal-header h2 {
+                font-size: 1.3rem;
+            }
+            
+            .modal-body {
+                padding: 20px;
+            }
+            
+            .modal-intro {
+                font-size: 1rem;
+            }
+            
+            .modal-body h3 {
+                font-size: 1.1rem;
+            }
+            
+            .model-cards {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .model-card {
+                padding: 15px;
+            }
+            
+            .model-card h4 {
+                font-size: 0.9rem;
+            }
+            
+            .feature-list li {
+                padding: 10px 0;
+                font-size: 0.9rem;
+            }
+            
+            .input-area {
+                padding: 12px;
+            }
+            
+            .input-wrapper {
+                padding: 8px;
+                border-radius: 10px;
+            }
+            
+            textarea {
+                font-size: 0.95rem;
+            }
+            
+            button#send-btn {
+                width: 36px;
+                height: 36px;
+            }
+            
+            .theme-toggle, .about-btn, .clear-chat-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+            
+            .chat-history {
+                padding: 15px;
+                gap: 15px;
+            }
+            
+            aside.meta-insights {
+                flex-direction: column;
+                max-height: 200px;
+                gap: 10px;
+            }
+            
+            .insight-card {
+                padding: 12px;
+            }
+            
+            .insight-card h4 {
+                font-size: 0.8rem;
+                margin-bottom: 8px;
+            }
+            
+            .insight-content {
+                font-size: 0.8rem;
+                max-height: 60px;
+            }
+            
+            .select-trigger {
+                padding: 8px 12px;
+                min-height: 40px;
+                font-size: 0.85rem;
+            }
+            
+            .select-item {
+                padding: 8px 10px;
+                font-size: 0.85rem;
+            }
+            
+            .select-item-icon {
+                font-size: 1.1rem;
+                width: 24px;
+            }
+            
+            .select-item-description {
+                font-size: 0.7rem;
+            }
+            
+            .github-link {
+                padding: 8px 16px;
+                font-size: 0.85rem;
+            }
+            
+            /* Hide particles on small screens for performance */
+            .particles {
+                display: none;
+            }
+            
+            .bg-doodles {
+                display: none;
+            }
+            
+            .chat-doodles {
+                display: none;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .logo h1 {
+                font-size: 1rem;
+            }
+            
+            .header-controls {
+                gap: 8px;
+            }
+            
+            .theme-toggle, .about-btn, .clear-chat-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 0.9rem;
+            }
+            
+            .message {
+                padding-left: 45px;
+            }
+            
+            .message::before {
+                width: 26px;
+                height: 26px;
+                font-size: 0.7rem;
+            }
+        }
+
+        /* Tablet landscape */
+        @media (min-width: 901px) and (max-width: 1100px) {
+            aside.meta-insights {
+                max-width: 300px;
+            }
+        }
+
+        /* High DPI / Retina displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .particle {
+                width: 3px;
+                height: 3px;
+            }
+        }
+
+        /* Reduced motion preference */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .particles, .bg-doodles, .chat-doodles {
+                display: none;
+            }
+            
+            header, aside, .input-area {
+                display: none;
+            }
+            
+            .chat-interface {
+                border: none;
+                box-shadow: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
+    <!-- Floating Particles -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
     <!-- Decorative Background Doodles -->
     <div class="bg-doodles">
         <svg class="doodle doodle-1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <path
-                d="M45.3,-57.5C57.9,-47.3,66.8,-32.3,70.4,-16.1C74,0.1,72.3,17.4,64.4,31.6C56.5,45.8,42.4,57,26.8,62.8C11.2,68.6,-5.9,69,-21.4,63.8C-36.9,58.6,-50.8,47.8,-59.5,33.8C-68.2,19.8,-71.7,2.6,-68.4,-13.3C-65.1,-29.2,-55,-43.8,-42.3,-54C-29.6,-64.2,-14.8,-69.9,0.7,-70.8C16.2,-71.7,32.7,-67.7,45.3,-57.5Z"
-                transform="translate(100 100)" />
+            <path d="M45.3,-57.5C57.9,-47.3,66.8,-32.3,70.4,-16.1C74,0.1,72.3,17.4,64.4,31.6C56.5,45.8,42.4,57,26.8,62.8C11.2,68.6,-5.9,69,-21.4,63.8C-36.9,58.6,-50.8,47.8,-59.5,33.8C-68.2,19.8,-71.7,2.6,-68.4,-13.3C-65.1,-29.2,-55,-43.8,-42.3,-54C-29.6,-64.2,-14.8,-69.9,0.7,-70.8C16.2,-71.7,32.7,-67.7,45.3,-57.5Z" transform="translate(100 100)" />
         </svg>
         <svg class="doodle doodle-2" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <path
-                d="M39.5,-55.3C49.8,-43.4,56.3,-29.7,59.7,-15.3C63.1,-0.9,63.4,14.1,57.5,26.3C51.6,38.5,39.5,47.9,26.3,54.1C13.1,60.3,-1.2,63.3,-14.8,60.1C-28.4,56.9,-41.3,47.5,-50.5,35.1C-59.7,22.7,-65.2,7.3,-64.4,-7.7C-63.6,-22.7,-56.5,-37.3,-45.8,-49C-35.1,-60.7,-21.8,-69.5,-7.3,-70.8C7.2,-72.1,29.2,-67.2,39.5,-55.3Z"
-                transform="translate(100 100)" />
+            <path d="M39.5,-55.3C49.8,-43.4,56.3,-29.7,59.7,-15.3C63.1,-0.9,63.4,14.1,57.5,26.3C51.6,38.5,39.5,47.9,26.3,54.1C13.1,60.3,-1.2,63.3,-14.8,60.1C-28.4,56.9,-41.3,47.5,-50.5,35.1C-59.7,22.7,-65.2,7.3,-64.4,-7.7C-63.6,-22.7,-56.5,-37.3,-45.8,-49C-35.1,-60.7,-21.8,-69.5,-7.3,-70.8C7.2,-72.1,29.2,-67.2,39.5,-55.3Z" transform="translate(100 100)" />
         </svg>
         <svg class="doodle doodle-3" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
             <circle cx="100" cy="100" r="50" fill="none" stroke-width="2" opacity="0.3" />
@@ -33,14 +1994,14 @@
             <rect x="50" y="50" width="100" height="100" rx="15" fill="none" stroke-width="2" opacity="0.25" />
         </svg>
         <svg class="doodle doodle-5" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <polygon points="100,30 130,70 170,70 140,100 160,140 100,110 40,140 60,100 30,70 70,70" fill="none"
-                stroke-width="1.5" opacity="0.3" />
+            <polygon points="100,30 130,70 170,70 140,100 160,140 100,110 40,140 60,100 30,70 70,70" fill="none" stroke-width="1.5" opacity="0.3" />
         </svg>
         <svg class="doodle doodle-6" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
             <path d="M30,100 Q60,50 100,70 T170,100" fill="none" stroke-width="2" opacity="0.25" />
             <path d="M30,110 Q60,160 100,140 T170,110" fill="none" stroke-width="2" opacity="0.25" />
         </svg>
     </div>
+
     <div class="app-container">
         <header>
             <div class="logo">
@@ -49,16 +2010,64 @@
             </div>
             <div class="header-controls">
                 <div class="model-selector">
-                    <label for="model-select"><i class="fas fa-robot"></i> Select Intelligence:</label>
-                    <div class="select-wrapper">
-                        <select id="model-select">
-                            <option value="nvidia" data-icon="fa-layer-group">🧠 Meta-Agent (Nvidia)</option>
-                            <option value="gemma" data-icon="fa-gem">💎 Gemma (Google)</option>
-                            <option value="deepseek" data-icon="fa-compass">🧭 DeepSeek</option>
+                    <label><i class="fas fa-robot"></i> Select Intelligence:</label>
+                    
+                    <!-- Custom Select Component -->
+                    <div class="custom-select" id="custom-select">
+                        <select id="model-select" class="native-select">
+                            <option value="nvidia">Meta-Agent (Nvidia)</option>
+                            <option value="mimo">Mimo</option>
+                            <option value="deepseek">DeepSeek</option>
                         </select>
-                        <i class="fas fa-chevron-down select-arrow"></i>
+                        
+                        <button type="button" class="select-trigger" id="select-trigger" aria-haspopup="listbox" aria-expanded="false">
+                            <span class="select-trigger-content">
+                                <span class="select-trigger-icon">🧠</span>
+                                <span class="select-trigger-text">Meta-Agent (Nvidia)</span>
+                            </span>
+                            <i class="fas fa-chevron-down select-trigger-arrow"></i>
+                        </button>
+                        
+                        <div class="select-content" id="select-content" role="listbox">
+                            <div class="select-viewport">
+                                <div class="select-label">Meta-Agent</div>
+                                
+                                <div class="select-item selected" data-value="nvidia" role="option" tabindex="0">
+                                    <span class="select-item-icon">🧠</span>
+                                    <div class="select-item-content">
+                                        <span class="select-item-title">Meta-Agent (Nvidia)</span>
+                                        <span class="select-item-description">Synthesizes insights from multiple models</span>
+                                    </div>
+                                    <span class="select-item-check"><i class="fas fa-check"></i></span>
+                                </div>
+                                
+                                <div class="select-separator"></div>
+                                <div class="select-label">Individual Models</div>
+                                
+                                <div class="select-item" data-value="mimo" role="option" tabindex="0">
+                                    <span class="select-item-icon">💎</span>
+                                    <div class="select-item-content">
+                                        <span class="select-item-title">Mimo</span>
+                                        <span class="select-item-description">Precise contextual understanding</span>
+                                    </div>
+                                    <span class="select-item-check"><i class="fas fa-check"></i></span>
+                                </div>
+                                
+                                <div class="select-item" data-value="deepseek" role="option" tabindex="0">
+                                    <span class="select-item-icon">🧭</span>
+                                    <div class="select-item-content">
+                                        <span class="select-item-title">DeepSeek</span>
+                                        <span class="select-item-description">Deep reasoning & analytics</span>
+                                    </div>
+                                    <span class="select-item-check"><i class="fas fa-check"></i></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <button id="clear-chat-btn" class="clear-chat-btn" aria-label="Clear chat">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
                 <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
                     <i class="fas fa-sun"></i>
                 </button>
@@ -80,55 +2089,50 @@
                 <div class="modal-body">
                     <p class="modal-intro">
                         An advanced AI system that combines the power of multiple language models to deliver superior,
-                        well-rounded responses.It uses a large language model (LLM) as its central brain to autonomously
-                        design, optimize, and manage a system of other specialized AI agents.
+                        well-rounded responses.
                     </p>
 
                     <h3><i class="fas fa-layer-group"></i> How It Works</h3>
                     <p>
                         The Meta-Agent employs a sophisticated multi-model approach where it consults both
-                        <strong>Gemma (Google)</strong> and <strong>DeepSeek</strong> AI models simultaneously.
-                        These individual responses are then synthesized by the <strong>Meta-Agent (Nvidia)</strong>
+                        <strong>Mimo</strong> and <strong>DeepSeek</strong> AI models simultaneously.
+                        These individual responses are then synthesized by the <strong>Nvidia Nemotron</strong>
                         to produce a comprehensive, accurate, and content-rich final answer.
                     </p>
 
                     <h3><i class="fas fa-brain"></i> Key Features</h3>
                     <ul class="feature-list">
-                        <li><i class="fas fa-check-circle"></i> <strong>Multi-Model Intelligence:</strong> Leverages
-                            insights from multiple AI models</li>
-                        <li><i class="fas fa-check-circle"></i> <strong>Enhanced Accuracy:</strong> Cross-validates
-                            responses for better reliability</li>
-                        <li><i class="fas fa-check-circle"></i> <strong>Comprehensive Answers:</strong> Combines
-                            perspectives for richer content</li>
-                        <li><i class="fas fa-check-circle"></i> <strong>Transparent Process:</strong> View individual
-                            model inputs in real-time</li>
-                        <li><i class="fas fa-check-circle"></i> <strong>Flexible Selection:</strong> Choose between
-                            meta-synthesis or direct model access</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>Multi-Model Intelligence:</strong> Leverages insights from multiple AI models</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>Enhanced Accuracy:</strong> Cross-validates responses for better reliability</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>Comprehensive Answers:</strong> Combines perspectives for richer content</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>Transparent Process:</strong> View individual model inputs in real-time</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>Flexible Selection:</strong> Choose between meta-synthesis or direct model access</li>
                     </ul>
 
                     <h3><i class="fas fa-cogs"></i> Available Models</h3>
                     <div class="model-cards">
                         <div class="model-card">
                             <div class="model-icon">🧠</div>
-                            <h4>Meta-Agent (Nvidia)</h4>
-                            <p>Synthesizes responses from Gemma and DeepSeek for optimal accuracy and comprehensiveness.
-                            </p>
+                            <h4>Nvidia Nemotron</h4>
+                            <p>Nemotron-3-nano-30b-a3b</p>
+                            <p>Synthesizes responses from Mimo and DeepSeek for optimal accuracy.</p>
                         </div>
                         <div class="model-card">
                             <div class="model-icon">💎</div>
-                            <h4>Gemma (Google)</h4>
-                            <p>Google's powerful language model known for precise and contextual understanding.</p>
+                            <h4>Mimo</h4>
+                            <p>Mimo-v2-flash</p>
+                            <p>Precise and contextual understanding.</p>
                         </div>
                         <div class="model-card">
                             <div class="model-icon">🧭</div>
                             <h4>DeepSeek</h4>
-                            <p>Advanced AI model specializing in deep reasoning and analytical responses.</p>
+                            <p>Deepseek-r1t2-chimera</p>
+                            <p>Deep reasoning and analytical responses.</p>
                         </div>
                     </div>
 
                     <div class="modal-footer">
                         <p><i class="fas fa-code"></i> Built with Spring Boot & Spring AI</p>
-                        <!-- TODO: Replace YOUR_GITHUB_USERNAME and YOUR_REPO_NAME with your actual GitHub repository details -->
                         <a href="https://github.com/gaurabhkr" target="_blank" class="github-link">
                             <i class="fab fa-github"></i> View on GitHub
                         </a>
@@ -148,8 +2152,7 @@
                         <path d="M50,100 Q75,50 100,100 T150,100" fill="none" stroke-width="2" opacity="0.3" />
                     </svg>
                     <svg class="chat-doodle chat-doodle-3" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                        <polygon points="100,50 120,90 160,100 120,110 100,150 80,110 40,100 80,90" fill="none"
-                            stroke-width="1.5" opacity="0.25" />
+                        <polygon points="100,50 120,90 160,100 120,110 100,150 80,110 40,100 80,90" fill="none" stroke-width="1.5" opacity="0.25" />
                     </svg>
                     <svg class="chat-doodle chat-doodle-4" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                         <rect x="60" y="60" width="80" height="80" rx="20" fill="none" stroke-width="1" opacity="0.2" />
@@ -158,18 +2161,15 @@
                 <div id="chat-history" class="chat-history">
                     <div class="welcome-message">
                         <h2>Welcome to the Meta-Mind</h2>
-                        <p>Select a model and start a conversation. The Meta-Agent synthesizes insights from multiple
-                            sub-models.</p>
+                        <p>Select a model and start a conversation. The Meta-Agent synthesizes insights from multiple sub-models.</p>
                     </div>
                 </div>
 
-                <div class="input-area">
-                    <div class="input-wrapper">
-                        <textarea id="user-input" placeholder="Ask anything... (Shift+Enter for new line)"
-                            autocomplete="off" rows="1"></textarea>
+                <div class="input-area" id="input-area">
+                    <div class="input-wrapper" id="input-wrapper">
+                        <textarea id="user-input" placeholder="Ask anything... (Shift+Enter for new line)" autocomplete="off" rows="1"></textarea>
                         <button id="send-btn" aria-label="Send message">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <line x1="22" y1="2" x2="11" y2="13"></line>
                                 <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                             </svg>
@@ -181,17 +2181,644 @@
             <aside class="meta-insights" id="meta-insights-panel">
                 <h3>Meta-Agent Insights</h3>
                 <div class="insight-card">
-                    <h4>Gemma Input</h4>
-                    <div id="insight-gemma" class="insight-content waiting">Waiting for query...</div>
+                    <h4>Mimo Query</h4>
+                    <div id="insight-mimo" class="insight-content waiting">Waiting for query...</div>
                 </div>
                 <div class="insight-card">
-                    <h4>DeepSeek Input</h4>
+                    <h4>DeepSeek Query</h4>
                     <div id="insight-deepseek" class="insight-content waiting">Waiting for query...</div>
                 </div>
             </aside>
         </main>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+    
+        // ============================================
+        // API Configuration
+        // ============================================
+        const API_CONFIG = {
+            endpoints: {
+                nvidia: '/api/nvidia/',           // Meta-Agent endpoint
+                mimo: '/api/mimo/',               // Mimo model endpoint
+                deepseek: '/api/deepseek/',       // DeepSeek model endpoint
+                mimoInsight: '/api/nvidia/firstmodelresponse',      // Mimo insight for meta-agent
+                deepseekInsight: '/api/nvidia/secondmodelresponse'  // DeepSeek insight for meta-agent
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatHistory = document.getElementById('chat-history');
+            const userInput = document.getElementById('user-input');
+            const sendBtn = document.getElementById('send-btn');
+            const modelSelect = document.getElementById('model-select');
+            const metaPanel = document.getElementById('meta-insights-panel');
+            const insightMimo = document.getElementById('insight-mimo');
+            const insightDeepseek = document.getElementById('insight-deepseek');
+            const themeToggle = document.getElementById('theme-toggle');
+            const inputArea = document.getElementById('input-area');
+            const inputWrapper = document.getElementById('input-wrapper');
+
+            // Custom Select Elements
+            const customSelect = document.getElementById('custom-select');
+            const selectTrigger = document.getElementById('select-trigger');
+            const selectContent = document.getElementById('select-content');
+            const selectItems = document.querySelectorAll('.select-item');
+
+            let isThinking = false;
+            let highlightedIndex = -1;
+
+            // Custom Select Functionality
+            function openSelect() {
+                selectTrigger.classList.add('open');
+                selectContent.classList.add('open');
+                selectTrigger.setAttribute('aria-expanded', 'true');
+                highlightedIndex = Array.from(selectItems).findIndex(item => item.classList.contains('selected'));
+                updateHighlight();
+            }
+
+            function closeSelect() {
+                selectTrigger.classList.remove('open');
+                selectContent.classList.remove('open');
+                selectTrigger.setAttribute('aria-expanded', 'false');
+                highlightedIndex = -1;
+                selectItems.forEach(item => item.classList.remove('highlighted'));
+            }
+
+            function toggleSelect() {
+                if (selectContent.classList.contains('open')) {
+                    closeSelect();
+                } else {
+                    openSelect();
+                }
+            }
+
+            function updateHighlight() {
+                selectItems.forEach((item, index) => {
+                    if (index === highlightedIndex) {
+                        item.classList.add('highlighted');
+                        item.scrollIntoView({ block: 'nearest' });
+                    } else {
+                        item.classList.remove('highlighted');
+                    }
+                });
+            }
+
+            function selectValue(value) {
+                const selectedItem = document.querySelector(`.select-item[data-value="${value}"]`);
+                if (!selectedItem) return;
+
+                modelSelect.value = value;
+                selectItems.forEach(item => item.classList.remove('selected'));
+                selectedItem.classList.add('selected');
+
+                const icon = selectedItem.querySelector('.select-item-icon').textContent;
+                const title = selectedItem.querySelector('.select-item-title').textContent;
+                selectTrigger.querySelector('.select-trigger-icon').textContent = icon;
+                selectTrigger.querySelector('.select-trigger-text').textContent = title;
+
+                closeSelect();
+                modelSelect.dispatchEvent(new Event('change'));
+
+                selectedItem.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    selectedItem.style.transform = '';
+                }, 150);
+            }
+
+            // Event Listeners for Custom Select
+            selectTrigger.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (!customSelect.classList.contains('disabled')) {
+                    toggleSelect();
+                }
+            });
+
+            selectItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    selectValue(item.dataset.value);
+                });
+
+                item.addEventListener('mouseenter', () => {
+                    highlightedIndex = Array.from(selectItems).indexOf(item);
+                    updateHighlight();
+                });
+            });
+
+            selectTrigger.addEventListener('keydown', (e) => {
+                if (customSelect.classList.contains('disabled')) return;
+
+                switch (e.key) {
+                    case 'Enter':
+                    case ' ':
+                        e.preventDefault();
+                        if (selectContent.classList.contains('open') && highlightedIndex >= 0) {
+                            selectValue(selectItems[highlightedIndex].dataset.value);
+                        } else {
+                            toggleSelect();
+                        }
+                        break;
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        if (!selectContent.classList.contains('open')) {
+                            openSelect();
+                        } else {
+                            highlightedIndex = Math.min(highlightedIndex + 1, selectItems.length - 1);
+                            updateHighlight();
+                        }
+                        break;
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        if (selectContent.classList.contains('open')) {
+                            highlightedIndex = Math.max(highlightedIndex - 1, 0);
+                            updateHighlight();
+                        }
+                        break;
+                    case 'Escape':
+                        closeSelect();
+                        break;
+                    case 'Tab':
+                        closeSelect();
+                        break;
+                }
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!customSelect.contains(e.target)) {
+                    closeSelect();
+                }
+            });
+
+            function setSelectDisabled(disabled) {
+                if (disabled) {
+                    customSelect.classList.add('disabled');
+                    closeSelect();
+                } else {
+                    customSelect.classList.remove('disabled');
+                }
+            }
+
+            // Theme Management
+            const currentTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            updateThemeIcon(currentTheme);
+
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon(newTheme);
+            });
+
+            function updateThemeIcon(theme) {
+                const icon = themeToggle.querySelector('i');
+                if (theme === 'dark') {
+                    icon.className = 'fas fa-sun';
+                } else {
+                    icon.className = 'fas fa-moon';
+                }
+            }
+
+            // About Modal Management
+            const aboutBtn = document.getElementById('about-btn');
+            const aboutModal = document.getElementById('about-modal');
+            const modalClose = document.getElementById('modal-close');
+
+            aboutBtn.addEventListener('click', () => {
+                aboutModal.classList.add('show');
+            });
+
+            modalClose.addEventListener('click', () => {
+                aboutModal.classList.remove('show');
+            });
+
+            aboutModal.addEventListener('click', (e) => {
+                if (e.target === aboutModal) {
+                    aboutModal.classList.remove('show');
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && aboutModal.classList.contains('show')) {
+                    aboutModal.classList.remove('show');
+                }
+            });
+
+            // Logo click to reload
+            const logo = document.querySelector('.logo');
+            logo.addEventListener('click', () => {
+                window.location.reload();
+            });
+
+            // Clear Chat Functionality
+            const clearChatBtn = document.getElementById('clear-chat-btn');
+            
+            clearChatBtn.addEventListener('click', () => {
+                clearChat();
+            });
+
+            function clearChat() {
+                const messages = chatHistory.querySelectorAll('.message');
+                
+                if (messages.length === 0) return;
+                
+                messages.forEach((msg, index) => {
+                    setTimeout(() => {
+                        msg.style.animation = 'messageSlideOut 0.3s ease forwards';
+                        setTimeout(() => {
+                            msg.remove();
+                        }, 300);
+                    }, index * 50);
+                });
+
+                setTimeout(() => {
+                    const welcomeExists = document.querySelector('.welcome-message');
+                    if (!welcomeExists) {
+                        const welcome = document.createElement('div');
+                        welcome.className = 'welcome-message';
+                        welcome.innerHTML = `
+                            <h2>Welcome to the Meta-Mind</h2>
+                            <p>Select a model and start a conversation. The Meta-Agent synthesizes insights from multiple sub-models.</p>
+                        `;
+                        chatHistory.appendChild(welcome);
+                    }
+                }, messages.length * 50 + 350);
+
+                clearInsights();
+            }
+
+            // Initial state check
+            updatePanelVisibility();
+
+            modelSelect.addEventListener('change', () => {
+                updatePanelVisibility();
+                selectTrigger.style.transform = 'scale(1.02)';
+                selectTrigger.style.boxShadow = '0 0 20px var(--primary-glow)';
+                setTimeout(() => {
+                    selectTrigger.style.transform = '';
+                    selectTrigger.style.boxShadow = '';
+                }, 300);
+            });
+
+            function updatePanelVisibility() {
+                if (modelSelect.value === 'nvidia') {
+                    metaPanel.style.opacity = '1';
+                    metaPanel.style.transform = 'translateX(0)';
+                    metaPanel.style.pointerEvents = 'all';
+                } else {
+                    metaPanel.style.opacity = '0.5';
+                    metaPanel.style.pointerEvents = 'none';
+                }
+            }
+
+            // Auto-resize textarea
+            userInput.addEventListener('input', () => {
+                userInput.style.height = 'auto';
+                userInput.style.height = userInput.scrollHeight + 'px';
+            });
+
+            // Handle Enter and Shift+Enter
+            userInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey && !isThinking) {
+                    e.preventDefault();
+                    handleSend();
+                }
+            });
+
+            sendBtn.addEventListener('click', () => {
+                if (!isThinking) {
+                    handleSend();
+                }
+            });
+
+            function setThinkingState(thinking) {
+                isThinking = thinking;
+                
+                if (thinking) {
+                    inputArea.classList.add('disabled');
+                    inputWrapper.classList.add('disabled');
+                    userInput.disabled = true;
+                    sendBtn.disabled = true;
+                    userInput.placeholder = "AI is thinking... Please wait";
+                    setSelectDisabled(true);
+                } else {
+                    inputArea.classList.remove('disabled');
+                    inputWrapper.classList.remove('disabled');
+                    userInput.disabled = false;
+                    sendBtn.disabled = false;
+                    userInput.placeholder = "Ask anything... (Shift+Enter for new line)";
+                    setSelectDisabled(false);
+                }
+            }
+
+            async function handleSend() {
+                const message = userInput.value.trim();
+                if (!message) return;
+
+                userInput.value = '';
+                userInput.style.height = 'auto';
+
+                addMessage(message, 'user');
+
+                setThinkingState(true);
+                const loadingId = addThinkingMessage();
+
+                const model = modelSelect.value;
+                const encodedMessage = encodeURIComponent(message);
+                const endpoint = API_CONFIG.endpoints[model] + encodedMessage;
+
+                try {
+                    const response = await fetch(endpoint, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.text();
+                    
+                    removeMessage(loadingId);
+                    
+                    // Handle response - could be plain text or JSON, may contain HTML
+                    let aiResponse;
+                    try {
+                        const jsonData = JSON.parse(data);
+                        aiResponse = jsonData.response || jsonData.message || jsonData.content || JSON.stringify(jsonData);
+                    } catch {
+                        aiResponse = data; // Plain text response
+                    }
+                    
+                    addMessage(aiResponse, 'ai', getModelDisplayName(model));
+
+                    if (model === 'nvidia') {
+                        fetchInsights();
+                    } else {
+                        clearInsights();
+                    }
+
+                } catch (error) {
+                    removeMessage(loadingId);
+                    addMessage(`Error: ${error.message}. Please check your API connection.`, 'ai', 'System', true);
+                    console.error('API Error:', error);
+                } finally {
+                    setThinkingState(false);
+                }
+            }
+
+            async function fetchInsights() {
+                insightMimo.innerHTML = '<span class="pulse-text">🔄 Fetching Mimo insights...</span>';
+                insightDeepseek.innerHTML = '<span class="pulse-text">🔄 Fetching DeepSeek insights...</span>';
+
+                try {
+                    // Fetch both insights in parallel
+                    const [mimoResponse, deepseekResponse] = await Promise.all([
+                        fetch(API_CONFIG.endpoints.mimoInsight, {
+                            method: 'GET',
+                            headers: { 'Accept': 'application/json' }
+                        }),
+                        fetch(API_CONFIG.endpoints.deepseekInsight, {
+                            method: 'GET',
+                            headers: { 'Accept': 'application/json' }
+                        })
+                    ]);
+
+                    // Process Mimo insight
+                    if (mimoResponse.ok) {
+                        const mimoData = await mimoResponse.text();
+                        let mimoText;
+                        try {
+                            const jsonData = JSON.parse(mimoData);
+                            mimoText = jsonData.response || jsonData.message || jsonData.content || JSON.stringify(jsonData);
+                        } catch {
+                            mimoText = mimoData || 'No insight available';
+                        }
+                        // Render HTML content
+                        insightMimo.innerHTML = sanitizeHtml(mimoText);
+                        insightMimo.classList.remove('waiting');
+                    } else {
+                        insightMimo.textContent = 'Failed to load insight';
+                    }
+
+                    // Process DeepSeek insight
+                    if (deepseekResponse.ok) {
+                        const deepseekData = await deepseekResponse.text();
+                        let deepseekText;
+                        try {
+                            const jsonData = JSON.parse(deepseekData);
+                            deepseekText = jsonData.response || jsonData.message || jsonData.content || JSON.stringify(jsonData);
+                        } catch {
+                            deepseekText = deepseekData || 'No insight available';
+                        }
+                        // Render HTML content
+                        insightDeepseek.innerHTML = sanitizeHtml(deepseekText);
+                        insightDeepseek.classList.remove('waiting');
+                    } else {
+                        insightDeepseek.textContent = 'Failed to load insight';
+                    }
+
+                } catch (error) {
+                    insightMimo.textContent = 'Failed to load insight';
+                    insightDeepseek.textContent = 'Failed to load insight';
+                    console.error('Insights error:', error);
+                }
+            }
+
+            function clearInsights() {
+                insightMimo.textContent = "Waiting for query...";
+                insightDeepseek.textContent = "Waiting for query...";
+                insightMimo.classList.add('waiting');
+                insightDeepseek.classList.add('waiting');
+            }
+
+            function addMessage(text, type, senderName = "You", isError = false) {
+                const div = document.createElement('div');
+                div.className = `message ${type}${isError ? ' error' : ''}`;
+
+                const header = document.createElement('div');
+                header.className = 'message-header';
+                header.textContent = senderName;
+
+                const content = document.createElement('div');
+                content.className = 'message-content';
+                
+                // For user messages, use textContent to prevent XSS
+                // For AI messages, render HTML for formatting
+                if (type === 'user') {
+                    content.textContent = text;
+                } else {
+                    content.innerHTML = sanitizeHtml(text);
+                }
+
+                div.appendChild(header);
+                div.appendChild(content);
+                chatHistory.appendChild(div);
+
+                const welcome = document.querySelector('.welcome-message');
+                if (welcome) welcome.remove();
+
+                scrollToBottom();
+            }
+
+            // Sanitize HTML to allow safe tags only
+            function sanitizeHtml(html) {
+                if (!html) return '';
+                
+                // Create a temporary element to parse the HTML
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                
+                // List of allowed tags
+                const allowedTags = [
+                    'p', 'br', 'strong', 'b', 'em', 'i', 'u', 's', 'strike',
+                    'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+                    'ul', 'ol', 'li',
+                    'blockquote', 'pre', 'code',
+                    'a', 'span', 'div',
+                    'table', 'thead', 'tbody', 'tr', 'th', 'td',
+                    'hr', 'sub', 'sup', 'mark'
+                ];
+                
+                // List of allowed attributes
+                const allowedAttrs = ['href', 'target', 'rel', 'class'];
+                
+                function cleanNode(node) {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        return node.cloneNode();
+                    }
+                    
+                    if (node.nodeType !== Node.ELEMENT_NODE) {
+                        return null;
+                    }
+                    
+                    const tagName = node.tagName.toLowerCase();
+                    
+                    if (!allowedTags.includes(tagName)) {
+                        // If tag not allowed, just return text content
+                        const fragment = document.createDocumentFragment();
+                        for (const child of node.childNodes) {
+                            const cleanedChild = cleanNode(child);
+                            if (cleanedChild) fragment.appendChild(cleanedChild);
+                        }
+                        return fragment;
+                    }
+                    
+                    const cleanedElement = document.createElement(tagName);
+                    
+                    // Copy allowed attributes
+                    for (const attr of allowedAttrs) {
+                        if (node.hasAttribute(attr)) {
+                            let value = node.getAttribute(attr);
+                            // For href, ensure it's not javascript:
+                            if (attr === 'href' && value.toLowerCase().startsWith('javascript:')) {
+                                continue;
+                            }
+                            cleanedElement.setAttribute(attr, value);
+                        }
+                    }
+                    
+                    // For links, add security attributes
+                    if (tagName === 'a') {
+                        cleanedElement.setAttribute('target', '_blank');
+                        cleanedElement.setAttribute('rel', 'noopener noreferrer');
+                    }
+                    
+                    // Recursively clean children
+                    for (const child of node.childNodes) {
+                        const cleanedChild = cleanNode(child);
+                        if (cleanedChild) cleanedElement.appendChild(cleanedChild);
+                    }
+                    
+                    return cleanedElement;
+                }
+                
+                const cleanedFragment = document.createDocumentFragment();
+                for (const child of tempDiv.childNodes) {
+                    const cleanedChild = cleanNode(child);
+                    if (cleanedChild) cleanedFragment.appendChild(cleanedChild);
+                }
+                
+                const resultDiv = document.createElement('div');
+                resultDiv.appendChild(cleanedFragment);
+                return resultDiv.innerHTML;
+            }
+
+            function addThinkingMessage() {
+                const id = 'loading-' + Date.now();
+                const div = document.createElement('div');
+                div.id = id;
+                div.className = 'message ai';
+                
+                div.innerHTML = `
+                    <div class="message-header">AI is thinking...</div>
+                    <div class="thinking-container">
+                        <span class="thinking-brain">🧠</span>
+                        <div class="thinking-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <span class="thinking-text">Processing your request...</span>
+                        <div class="neural-network">
+                            <div class="neural-node"></div>
+                            <div class="neural-node"></div>
+                            <div class="neural-node"></div>
+                            <div class="neural-node"></div>
+                            <div class="neural-node"></div>
+                        </div>
+                    </div>
+                `;
+                
+                chatHistory.appendChild(div);
+                scrollToBottom();
+                
+                return id;
+            }
+
+            function removeMessage(id) {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.style.animation = 'fadeOut 0.3s ease forwards';
+                    setTimeout(() => el.remove(), 300);
+                }
+            }
+
+            function scrollToBottom() {
+                chatHistory.scrollTo({
+                    top: chatHistory.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }
+
+            function getModelDisplayName(model) {
+                switch (model) {
+                    case 'nvidia': return 'Meta-Agent (Nvidia)';
+                    case 'mimo': return 'Mimo';
+                    case 'deepseek': return 'DeepSeek';
+                    default: return 'AI';
+                }
+            }
+        });
+
+        // Add animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 1; transform: translateY(0); }
+                to { opacity: 0; transform: translateY(-10px); }
+            }
+            @keyframes messageSlideOut {
+                from { opacity: 1; transform: translateX(0) scale(1); }
+                to { opacity: 0; transform: translateX(100px) scale(0.8); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 
 </html>
