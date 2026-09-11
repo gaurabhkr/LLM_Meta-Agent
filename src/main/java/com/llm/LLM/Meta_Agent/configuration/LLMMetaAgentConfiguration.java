@@ -1,5 +1,7 @@
 package com.llm.LLM.Meta_Agent.Configuration;
 
+import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.model.openai.autoconfigure.OpenAiConnectionProperties;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
@@ -16,15 +18,15 @@ public class LLMMetaAgentConfiguration {
 	
 	public LLMMetaAgentConfiguration(OpenAiConnectionProperties con) {
 		this.API_KEY=con.getApiKey();
-		this.BASE_URL=con.getBaseUrl();System.out.println(BASE_URL+API_KEY);
+		this.BASE_URL=con.getBaseUrl();System.out.println(BASE_URL+"     "+API_KEY);
 	}
 	
 	@Bean
-	@Qualifier("mimo")
-	public OpenAiChatModel mimomodel() {
+	@Qualifier("nexagi")
+	public OpenAiChatModel nexagimodel() {
 		
 		//Making option for custom model and openaiapi they will make an openaichatmodel which is load into chatclient
-		var options=OpenAiChatOptions.builder().model("xiaomi/mimo-v2-flash:free").build();
+		var options=OpenAiChatOptions.builder().model("nex-agi/nex-n2.5-pro:free").build();
 		var openaiapi=OpenAiApi.builder().apiKey(API_KEY).baseUrl(BASE_URL).build();
 		
 		return OpenAiChatModel
@@ -36,10 +38,10 @@ public class LLMMetaAgentConfiguration {
 	}
 	
 	@Bean
-	@Qualifier("deepseek")
-	public OpenAiChatModel deepseekmodel() {
+	@Qualifier("northcode")
+	public OpenAiChatModel northcodemodel() {
 		
-		var options=OpenAiChatOptions.builder().model("tngtech/deepseek-r1t2-chimera:free").build();
+		var options=OpenAiChatOptions.builder().model("cohere/north-mini-code:free").build();
 		var openaiapi=OpenAiApi.builder().apiKey(API_KEY).baseUrl(BASE_URL).build();
 		
 		return OpenAiChatModel
@@ -54,7 +56,7 @@ public class LLMMetaAgentConfiguration {
 	@Qualifier("nvidia")
 	public OpenAiChatModel nvidiamodel() {
 		
-		var options=OpenAiChatOptions.builder().model("nvidia/nemotron-3-nano-30b-a3b:free").build();
+		var options=OpenAiChatOptions.builder().model("nvidia/nemotron-3-ultra-550b-a55b:free").build();
 		var openaiapi=OpenAiApi.builder().apiKey(API_KEY).baseUrl(BASE_URL).build();
 		
 		return OpenAiChatModel
@@ -64,19 +66,12 @@ public class LLMMetaAgentConfiguration {
 				.build();
 
 	}
-// Not using 
-//	@Bean
-//	@Qualifier("mistralai")
-//	private OpenAiChatModel mistralmodel() {
-//		
-//		var options=OpenAiChatOptions.builder().model("mistralai/devstral-2512:free").build();
-//		var openaiapi=OpenAiApi.builder().apiKey(API_KEY).baseUrl(API_KEY).build();
-//		
-//		return OpenAiChatModel
-//				.builder()
-//				.openAiApi(openaiapi)
-//				.defaultOptions(options)
-//				.build();
-//
-//	}
+	
+	@Bean
+	public ChatMemory chatMemory() {
+		return MessageWindowChatMemory
+				.builder()
+				.maxMessages(10)
+				.build();
+	}
 }

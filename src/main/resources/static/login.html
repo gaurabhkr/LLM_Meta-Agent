@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* ── LEFT: brand panel ── */
+        .brand-panel {
+            flex: 1;
+            background: linear-gradient(160deg, #2f3bd4 0%, #23209e 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px 70px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* decorative curved lines (like  background arcs) */
+        .brand-panel::before,
+        .brand-panel::after {
+            content: "";
+            position: absolute;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 50%;
+        }
+
+        .brand-panel::before {
+            width: 700px; height: 700px;
+            top: -200px; right: -250px;
+        }
+
+        .brand-panel::after {
+            width: 900px; height: 900px;
+            top: -300px; right: -400px;
+        }
+
+        .brand-icon {
+            font-size: 56px;
+            margin-bottom: 40px;
+        }
+
+        .brand-panel h1 {
+            font-size: 52px;
+            line-height: 1.2;
+            margin-bottom: 28px;
+            position: relative;
+        }
+
+        .brand-panel p {
+            font-size: 17px;
+            line-height: 1.65;
+            opacity: 0.85;
+            max-width: 420px;
+            position: relative;
+        }
+
+        .copyright {
+            position: absolute;
+            bottom: 30px;
+            left: 70px;
+            font-size: 13px;
+            opacity: 0.55;
+        }
+
+        /* ── RIGHT: form panel ── */
+        .form-panel {
+            flex: 1;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            padding: 50px 80px;
+            overflow-y: auto;
+        }
+
+        .form-logo {
+            font-size: 26px;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -0.5px;
+            margin-bottom: 60px;
+        }
+
+        .form-content {
+            max-width: 400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .form-content h1 {
+            font-size: 32px;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+
+        .form-content .register-line {
+            font-size: 14px;
+            color: #888;
+            line-height: 1.6;
+            margin-bottom: 36px;
+        }
+
+        .form-content .register-link {
+            color: #1a1a1a;
+            font-weight: 600;
+            text-decoration: underline;
+        }
+
+        /* fields — underline style like SaleSkip */
+        .field { margin-bottom: 28px; }
+
+        .field input {
+            width: 100%;
+            padding: 12px 4px;
+            border: none;
+            border-bottom: 1.5px solid #ddd;
+            font-size: 15px;
+            color: #222;
+            background: transparent;
+            transition: border-color 0.2s;
+        }
+
+        .field input:focus {
+            outline: none;
+            border-bottom: 2px solid #2f3bd4;
+            padding-bottom: 11px;      /* compensate border thickness */
+        }
+
+        .field input::placeholder { color: #b5b5b5; }
+
+        /* error — Lambda style inline red text */
+        #errorMsg {
+            display: none;
+            color: #e5493a;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        #errorMsg::before { content: "ⓘ "; }
+
+        /* dark CTA */
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .login-btn:hover { background: #000; transform: translateY(-1px); }
+
+        .forgot {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .forgot a { color: #1a1a1a; font-weight: 600; }
+
+        @media (max-width: 800px) {
+            .brand-panel { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LEFT brand panel -->
+    <div class="brand-panel">
+        <div class="brand-icon">✳</div>
+        <h1>Hello<br>LLM Meta Agent! 👋</h1>
+        <p>Log in to interact LLM with a fast, secure and
+           simple experience. Your session is protected by JWT authentication.</p>
+        <div class="copyright">© 2025 llmmetaagent. All rights reserved.</div>
+    </div>
+
+    <!-- RIGHT form panel -->
+    <div class="form-panel">
+        <div class="form-logo">LLM Meta Agent</div>
+
+        <div class="form-content">
+            <h1>Welcome Back!</h1>
+            <p class="register-line">
+                Don't have an account?
+                <a class="register-link" href="github.com/gaurabhkr"> Contact Us</a> —
+                We will add create account feature in our next Update.
+            </p>
+
+            <div id="errorMsg">Incorrect username or password. Please check and try again</div>
+
+            <form action="/api/login" method="POST">
+                <div class="field">
+                    <input type="text" id="username" name="username"
+                           placeholder="Username" required autofocus>
+                </div>
+
+                <div class="field">
+                    <input type="password" id="password" name="password"
+                           placeholder="Password" required>
+                </div>
+
+                <button type="submit" class="login-btn">Login Now</button>
+            </form>
+
+            <p class="forgot">Hey ! My Name is Gaurabh, I really like to hear your feedback <a href="github.com/gaurabhkr">Github</a></p>
+        </div>
+    </div>
+
+    <script>
+        if (window.location.search.includes("error=true")) {
+            document.getElementById("errorMsg").style.display = "block";
+        }
+    </script>
+
+</body>
+</html>

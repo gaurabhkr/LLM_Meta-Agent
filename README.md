@@ -1,55 +1,65 @@
 # 🧠 LLM Meta-Agent
 
-An advanced AI system that combines the power of multiple language models to deliver superior, well-rounded responses. It uses a large language model (LLM) as its central brain to autonomously design, optimize, and manage a system of other specialized AI agents.
+An advanced AI system that combines the power of multiple language models to deliver superior, well-rounded, and synthesized responses. It uses a primary LLM (Nvidia Nemotron) as its central brain to autonomously synthesize insights from specialized underlying AI models (NexAGI and NorthCode).
 
-![Java](https://img.shields.io/badge/Java-23.0.2-orange?logo=openjdk)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.9-brightgreen?logo=springboot)
-![License](https://img.shields.io/badge/License-MIT-blue)
+![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.9-brightgreen?logo=springboot) ![Spring AI](https://img.shields.io/badge/Spring%20AI-1.1.2-blue) ![Security](https://img.shields.io/badge/Security-JWT%20%2B%20Spring%20Security-red) ![License](https://img.shields.io/badge/License-MIT-blue)
 
-## ✨ Features
+---
 
-- **🔄 Multi-Model Intelligence**: Leverages insights from multiple AI models (Gemma, DeepSeek, Nvidia)
-- **🎯 Enhanced Accuracy**: Cross-validates responses for better reliability
-- **📊 Comprehensive Answers**: Combines perspectives for richer content
-- **👁️ Transparent Process**: View individual model inputs in real-time
-- **🎨 Beautiful UI**: Modern, responsive interface with dark/light themes
-- **💬 Multi-line Input**: Support for complex queries with Shift+Enter
-- **🎭 Animated Doodles**: Decorative background elements for enhanced visual appeal
+## ✨ Key Features
+
+- **🔄 Multi-Model Intelligence & Synthesis**: Concurrently queries **NexAGI** and **NorthCode** models and synthesizes their outputs using **Nvidia Nemotron** into a single, cohesive answer.
+- **⚡ Asynchronous Concurrent Execution**: Utilizes `CompletableFuture` to fetch initial model responses in parallel, drastically reducing overall latency.
+- **🔐 JWT Stateless Authentication**: Secure login flow using JWT stored in `HttpOnly` cookies, integrated with Spring Security.
+- **🧠 Short Memory / Chat Advisor**: Retains conversational context across interactions per authenticated session using Spring AI `ChatMemory`.
+- **📊 Real-time Model Insights**: Transparently inspect individual sub-model responses (`/api/nvidia/firstmodelresponse` & `/api/nvidia/secondmodelresponse`).
+- **📝 Preprompt Externalization**: Externalized prompt template (`classpath:Preprompt`) to maintain prompt clarity and facilitate easy tuning.
+
+---
 
 ## 🌐 Live Demo
-Experience the application live: **[https://llm-meta-agent.onrender.com/](https://llm-meta-agent.onrender.com/)**
+
+Experience the application live: **[https://llm-meta-agent.onrender.com/](https://llm-meta-agent.onrender.com/)**  
 *(Note: Initial load may take a minute on the free tier)*
 
-## 🏗️ Architecture
+---
 
-### How It Works
-
-1. **User Input**: User submits a query through the web interface
-2. **Parallel Processing**: Query is sent to both Mimo (Xiaomi) and DeepSeek models
-3. **Meta-Synthesis**: Nvidia Meta-Agent analyzes both responses
-4. **Final Answer**: Delivers a comprehensive, accurate response combining all insights
+## 🏗️ System Architecture
 
 ```mermaid
-graph LR
-    A[User Query] --> B[Mimo Model]
-    A --> C[DeepSeek Model]
-    B --> D[Meta-Agent Nvidia]
-    C --> D
-    D --> E[Final Response]
+graph TD
+    A[User Query via Web UI / API] --> B[Spring Security / JWT Auth Filter]
+    B --> C[LLMMetaAgentController]
+    C --> D[LLMMetaAgentService]
+    
+    subgraph Parallel Execution - CompletableFuture
+        D -->|Async Request| E[NexAGI Model: nex-agi/nex-n2.5-pro:free]
+        D -->|Async Request| F[NorthCode Model: cohere/north-mini-code:free]
+    end
+    
+    E -->|First Response| H[Nvidia Meta-Agent: nvidia/nemotron-3-ultra-550b-a55b:free]
+    F -->|Second Response| H
+    
+    H -->|System Preprompt + Synthesized Prompt| I[Final Synthesized Response]
+    I --> J[User Web Interface]
 ```
 
-**🏆 Unique Architecture**: This project utilizes a groundbreaking multi-model consensus approach. To date, the **OpenAI Council** is the only other system known to employ a comparable architecture for autonomous multi-agent synthesis.
+### Architecture Highlights
+1. **Parallel Execution**: Both sub-agent calls run asynchronously using `CompletableFuture.supplyAsync()`.
+2. **Context Window Memory**: NorthCode model leverages `MessageWindowChatMemory` scoped per authenticated user session.
+3. **Synthesis Engine**: Nvidia Nemotron prompt combines the user query and both model outputs with externalized `Preprompt` rules.
+
+---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- **Java 23.0.2** or higher
-- **Maven** (or use included Maven Wrapper)
-- **API Keys**:
-  - OpenRouter API Key (provides access to all required models)
+- **Java 21** or higher
+- **Maven** (or use the included `mvnw` wrapper)
+- **OpenRouter API Key** (Provides access to NexAGI, NorthCode, and Nvidia models)
 
-### Installation
+### Installation & Setup
 
 1. **Clone the repository**
    ```bash
@@ -58,124 +68,74 @@ graph LR
    ```
 
 2. **Configure API Keys**
-   
-   Set environment variable with your OpenRouter API key:
+
+   Set your OpenRouter API key as an environment variable or inside `application.properties`:
    ```bash
-   export OPENROUTER_API_KEY=your_openrouter_api_key_here
+   export SPRING_AI_OPENAI_API_KEY=your_openrouter_api_key_here
+   export SPRING_AI_OPENAI_BASE_URL=https://openrouter.ai/api/v1
    ```
 
-3. **Run the application**
+3. **Build & Run the Application**
+   
+   On Linux/macOS:
    ```bash
    ./mvnw spring-boot:run
    ```
    
-   Or on Windows:
-   ```bash
+   On Windows:
+   ```cmd
    mvnw.cmd spring-boot:run
    ```
 
-4. **Access the application**
-   
-   Open your browser and navigate to:
-   ```
-   http://localhost:8080
-   ```
+4. **Access the Application**
+   - **Login Page**: `http://localhost:8080/login.html`
+   - **Default Credentials**:
+     - Username: `user` | Password: `user`
+     - Username: `admin` | Password: `admin`
 
-## 🎨 UI Features
-
-- **Dark Mode** (default): Deep navy background with vibrant purple accents
-- **Light Mode**: Clean white background with subtle purple tones
-- **Persistence**: Your theme preference is saved in localStorage
-
-- Press **Enter** to send your message
-- Press **Shift+Enter** to create a new line
-- Textarea auto-resizes based on content
+---
 
 ## 🛠️ Technology Stack
 
-### Backend
-- **Spring Boot 3.5.9** - Application framework
-- **Spring AI** - AI model integration
-- **Maven** - Dependency management
+| Category | Core Technologies |
+| :--- | :--- |
+| **Backend & Core** | `Java 21` • `Spring Boot 3.5.9` • `Spring AI 1.1.2` • `Maven` |
+| **Security & Auth** | `Spring Security` • `JJWT 0.12.6` • `HttpOnly Cookies` |
+| **AI Models (OpenRouter)** | `NexAGI (nex-agi/nex-n2.5-pro)` • `NorthCode (cohere/north-mini-code)` • `Nvidia Meta-Agent (nvidia/nemotron-3-ultra-550b)` |
 
-### Frontend
-- **HTML5** - Structure
-- **CSS3** - Styling with CSS Variables
-- **Vanilla JavaScript** - Interactivity
-
-### AI Models
-
-- **Xiaomi mimo-v2-flash** - Precise and contextual understanding
-- **DeepSeek deepseek-r1t2-chimera** - Deep reasoning and analytical responses
-- **Nvidia nemotron-3-nano-30b as Meta-Agent** - Response synthesis and optimization
-
-## 📁 Project Structure
-
-```
-LLM-Meta-Agent/
-├── src/
-│   └── main/
-│       ├── java/
-│       │   └── com/llm/LLM/Meta_Agent/
-│       │       └── Controller/
-│       │           └── LLMMetaAgentController.java
-│       └── resources/
-│           └── static/
-│               ├── index.html
-│               ├── style.css
-│               └── script.js
-├── pom.xml
-└── README.md
-```
+---
 
 ## 🔌 API Endpoints
 
-### Main Endpoints
+### 🔑 Authentication Endpoints
 
-- `GET /api/mimo/{message}` - Query Mimo model directly
-- `GET /api/deepseek/{message}` - Query DeepSeek model directly
-- `GET /api/nvidia/{message}` - Query Meta-Agent (synthesized response)
+| Method | Endpoint | Description | Public / Auth |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/login` | Authenticate user, generate JWT, and set `HttpOnly` cookie | Public |
+| `GET` | `/api/logout` | Clear JWT cookie and redirect to login page | Public |
 
-### Meta-Agent Insights
+### 🤖 AI Agent Endpoints
 
-- `GET /api/nvidia/firstmodelresponse` - Get Mimo's response from last query
-- `GET /api/nvidia/secondmodelresponse` - Get DeepSeek's response from last query
+| Method | Endpoint | Description | Public / Auth |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/nvidia/{message}` | Main Meta-Agent query (Synthesizes responses concurrently) | Authenticated |
+| `GET` | `/api/nexagi/{message}` | Query NexAGI model directly | Authenticated |
+| `GET` | `/api/northcode/{message}` | Query NorthCode model directly (with memory support) | Authenticated |
+| `GET` | `/api/nvidia/firstmodelresponse` | Retrieve NexAGI response from the latest Meta-Agent query | Authenticated |
+| `GET` | `/api/nvidia/secondmodelresponse` | Retrieve NorthCode response from the latest Meta-Agent query | Authenticated |
 
-## 🎯 Usage Examples
+---
 
-### Direct Model Query
-```javascript
-fetch('/api/mimo/What is artificial intelligence?')
-  .then(response => response.text())
-  .then(data => console.log(data));
-```
+## 🌟 Key Updates & Improvements
 
-### Meta-Agent Query (Recommended)
-```javascript
-fetch('/api/nvidia/Explain quantum computing')
-  .then(response => response.text())
-  .then(data => console.log(data));
-```
+- **⚡ Service Architecture & Clean Code**: Decoupled business and AI logic from controllers into `@Service` classes.
+- **🔐 JWT Authentication Flow**: Stateless security using `JwtAuthenticationFilter`, `LLMMetaAgentJwtService`, and `HttpOnly` cookies.
+- **⚡ Latency Reduction**: Asynchronous sub-model fetching using `CompletableFuture.allOf()`.
+- **🔄 Model Updates**: Upgraded AI configurations to active OpenRouter endpoints (`nex-agi`, `cohere/north-mini-code`, and `nvidia/nemotron-3-ultra-550b`).
+- **📝 Externalized Prompts**: System preprompts loaded dynamically from `classpath:Preprompt`.
+- **💬 Short-Term Memory**: Session-aware chat history management using `MessageWindowChatMemory`.
 
-## 🌟 Key Highlights
-
-### Multi-Model Synthesis
-Instead of relying on a single AI model, the Meta-Agent:
-1. Consults multiple specialized models
-2. Analyzes their different perspectives
-3. Synthesizes a comprehensive final answer
-4. Provides transparent access to sub-model responses
-
-
-
-### Modern UI/UX
-- **Glassmorphism effects** for depth
-- **Smooth animations** on all interactions
-- **Auto-resizing textarea** for input
-- **Floating background doodles** for visual interest
-- **Responsive design** for all screen sizes
-
-
+---
 
 ## 🤝 Contributing
 
@@ -187,23 +147,18 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
+---
+
 ## 📝 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 👤 Author
-
-[@gaurabhkr](https://github.com/gaurabhkr)
-
-## 🙏 Acknowledgments
-
-- Spring Boot and Spring AI for seamless AI integration
-- OpenRouter for providing access to top-tier AI models
-
-## 📧 Contact
-
-For questions or feedback, please open an issue on GitHub.
+This project is licensed under the MIT License - see the `LICENSE` file for details.
 
 ---
 
-⭐ If you find this project useful, please consider giving it a star!
+## 👤 Author
+
+**Gaurabh** - [@gaurabhkr](https://github.com/gaurabhkr)
+
+⭐ *If you find this project useful, please consider giving it a star!*
+
+

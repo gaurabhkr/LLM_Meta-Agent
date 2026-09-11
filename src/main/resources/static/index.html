@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.9/purify.min.js"></script>
     <style>
         /* Dark Theme (default) */
         :root {
@@ -81,10 +82,7 @@
         /* Floating Particles */
         .particles {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             pointer-events: none;
             z-index: 0;
             overflow: hidden;
@@ -112,38 +110,22 @@
         .particle:nth-child(10) { left: 15%; animation-delay: 2.5s; }
 
         @keyframes particleFloat {
-            0% {
-                transform: translateY(100vh) scale(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.6;
-            }
-            90% {
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(-100px) scale(1);
-                opacity: 0;
-            }
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10%, 90% { opacity: 0.6; }
+            100% { transform: translateY(-100px) scale(1); opacity: 0; }
         }
 
         /* Background Doodles */
         .bg-doodles {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             pointer-events: none;
             z-index: 0;
             opacity: 0;
             transition: opacity 0.3s ease;
         }
 
-        :root[data-theme="light"] .bg-doodles {
-            opacity: 1;
-        }
+        :root[data-theme="light"] .bg-doodles { opacity: 1; }
 
         .doodle {
             position: absolute;
@@ -154,9 +136,7 @@
             animation: float 20s infinite ease-in-out;
         }
 
-        :root[data-theme="light"] .doodle {
-            opacity: 0.15;
-        }
+        :root[data-theme="light"] .doodle { opacity: 0.15; }
 
         .doodle-1 { top: 10%; right: 10%; animation-delay: 0s; }
         .doodle-2 { bottom: 15%; left: 5%; animation-delay: -7s; width: 250px; height: 250px; }
@@ -202,14 +182,8 @@
         }
 
         @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         :root[data-theme="light"] header {
@@ -232,9 +206,7 @@
             background: rgba(139, 92, 246, 0.1);
         }
 
-        .logo:active {
-            transform: scale(0.98);
-        }
+        .logo:active { transform: scale(0.98); }
 
         .logo-icon {
             font-size: 1.5rem;
@@ -299,9 +271,7 @@
             gap: 8px;
         }
 
-        .model-selector label i {
-            animation: bounce 2s infinite;
-        }
+        .model-selector label i { animation: bounce 2s infinite; }
 
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
@@ -341,13 +311,9 @@
             background: rgba(139, 92, 246, 0.05);
         }
 
-        .select-trigger:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px var(--primary-glow);
-        }
-
+        .select-trigger:focus,
         .select-trigger.open {
+            outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 2px var(--primary-glow);
         }
@@ -363,9 +329,7 @@
             line-height: 1;
         }
 
-        .select-trigger-text {
-            font-weight: 500;
-        }
+        .select-trigger-text { font-weight: 500; }
 
         .select-trigger-arrow {
             color: var(--text-muted);
@@ -373,9 +337,7 @@
             transition: transform 0.2s ease;
         }
 
-        .select-trigger.open .select-trigger-arrow {
-            transform: rotate(180deg);
-        }
+        .select-trigger.open .select-trigger-arrow { transform: rotate(180deg); }
 
         .select-content {
             position: absolute;
@@ -404,9 +366,7 @@
             transform: translateY(0) scale(1);
         }
 
-        .select-viewport {
-            padding: 4px;
-        }
+        .select-viewport { padding: 4px; }
 
         .select-label {
             padding: 8px 12px 4px;
@@ -436,18 +396,14 @@
             color: var(--text-main);
         }
 
-        .select-item:hover {
-            background: rgba(139, 92, 246, 0.1);
-        }
-
-        .select-item:focus {
+        .select-item:hover,
+        .select-item:focus,
+        .select-item.highlighted {
             outline: none;
             background: rgba(139, 92, 246, 0.1);
         }
 
-        .select-item.selected {
-            background: rgba(139, 92, 246, 0.15);
-        }
+        .select-item.selected { background: rgba(139, 92, 246, 0.15); }
 
         .select-item-icon {
             font-size: 1.3rem;
@@ -491,9 +447,7 @@
             transform: scale(1);
         }
 
-        .select-item-check i {
-            font-size: 0.85rem;
-        }
+        .select-item-check i { font-size: 0.85rem; }
 
         /* Item hover animation */
         .select-item::before {
@@ -510,14 +464,7 @@
         }
 
         .select-item:hover::before,
-        .select-item.selected::before {
-            height: 60%;
-        }
-
-        /* Keyboard navigation highlight */
-        .select-item.highlighted {
-            background: rgba(139, 92, 246, 0.1);
-        }
+        .select-item.selected::before { height: 60%; }
 
         /* Hidden native select for form compatibility */
         .native-select {
@@ -528,7 +475,8 @@
             height: 0;
         }
 
-        .theme-toggle, .about-btn {
+        /* Unified Icon Buttons (theme / about / clear / logout) */
+        .icon-btn {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             color: var(--text-main);
@@ -540,12 +488,12 @@
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             position: relative;
             overflow: hidden;
         }
 
-        .theme-toggle::before, .about-btn::before {
+        .icon-btn::before {
             content: '';
             position: absolute;
             top: 50%;
@@ -559,93 +507,36 @@
             z-index: 0;
         }
 
-        .theme-toggle:hover::before {
-            width: 100%;
-            height: 100%;
-        }
-
-        .about-btn:hover::before {
-            width: 100%;
-            height: 100%;
-            background: var(--secondary);
-        }
-
-        .theme-toggle:hover, .about-btn:hover {
+        .icon-btn:hover {
             color: white;
             transform: scale(1.1);
             box-shadow: 0 0 20px var(--primary-glow);
         }
 
-        .theme-toggle i, .about-btn i {
+        .icon-btn:hover::before { width: 100%; height: 100%; }
+
+        .icon-btn i {
             position: relative;
             z-index: 1;
             transition: transform 0.3s ease;
         }
 
-        .theme-toggle:hover i {
-            transform: rotate(360deg);
-        }
+        /* Per-button hover colors */
+        .about-btn:hover::before { background: var(--secondary); }
+        .about-btn:hover i { animation: wobble 0.5s ease; }
+        .theme-toggle:hover i { transform: rotate(360deg); }
 
-        .about-btn:hover i {
-            animation: wobble 0.5s ease;
-        }
+        .clear-chat-btn::before { background: #ef4444; }
+        .clear-chat-btn:hover { box-shadow: 0 0 20px rgba(239, 68, 68, 0.4); }
+        .clear-chat-btn:hover i { animation: shake 0.5s ease; }
+
+        .logout-btn::before { background: #f97316; }
+        .logout-btn:hover { box-shadow: 0 0 20px rgba(249, 115, 22, 0.4); }
 
         @keyframes wobble {
             0%, 100% { transform: rotate(0deg); }
             25% { transform: rotate(-15deg); }
             75% { transform: rotate(15deg); }
-        }
-
-        .clear-chat-btn {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1.1rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .clear-chat-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: #ef4444;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.4s ease, height 0.4s ease;
-            z-index: 0;
-        }
-
-        .clear-chat-btn:hover::before {
-            width: 100%;
-            height: 100%;
-        }
-
-        .clear-chat-btn:hover {
-            color: white;
-            transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
-        }
-
-        .clear-chat-btn i {
-            position: relative;
-            z-index: 1;
-            transition: transform 0.3s ease;
-        }
-
-        .clear-chat-btn:hover i {
-            animation: shake 0.5s ease;
         }
 
         @keyframes shake {
@@ -660,11 +551,8 @@
         .modal {
             display: none;
             position: fixed;
+            inset: 0;
             z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
             background-color: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(5px);
         }
@@ -698,14 +586,8 @@
         }
 
         @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            from { opacity: 0; transform: translateY(50px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .modal-header {
@@ -773,9 +655,7 @@
             gap: 10px;
         }
 
-        .modal-body h3 i {
-            color: var(--primary);
-        }
+        .modal-body h3 i { color: var(--primary); }
 
         .modal-body p {
             line-height: 1.7;
@@ -807,14 +687,8 @@
         .feature-list li:nth-child(5) { animation-delay: 0.5s; }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .feature-list li i {
@@ -888,9 +762,7 @@
             gap: 8px;
         }
 
-        .modal-footer i {
-            color: var(--primary);
-        }
+        .modal-footer i { color: var(--primary); }
 
         .github-link {
             display: inline-flex;
@@ -920,9 +792,7 @@
             transition: left 0.5s ease;
         }
 
-        .github-link:hover::before {
-            left: 100%;
-        }
+        .github-link:hover::before { left: 100%; }
 
         .github-link:hover {
             background: #7c3aed;
@@ -930,9 +800,7 @@
             box-shadow: 0 4px 12px var(--primary-glow);
         }
 
-        .github-link i {
-            font-size: 1.2rem;
-        }
+        .github-link i { font-size: 1.2rem; }
 
         /* Main Layout */
         main {
@@ -946,14 +814,8 @@
         }
 
         @keyframes fadeInMain {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .chat-interface {
@@ -968,17 +830,12 @@
             transition: box-shadow 0.3s ease;
         }
 
-        .chat-interface:hover {
-            box-shadow: 0 8px 30px var(--shadow);
-        }
+        .chat-interface:hover { box-shadow: 0 8px 30px var(--shadow); }
 
         /* Chat Background Doodles */
         .chat-doodles {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             pointer-events: none;
             z-index: 0;
             overflow: hidden;
@@ -1027,14 +884,8 @@
         }
 
         @keyframes fadeInScale {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .welcome-message h2 {
@@ -1060,14 +911,8 @@
         }
 
         @keyframes messageSlide {
-            from {
-                opacity: 0;
-                transform: translateY(30px) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            from { opacity: 0; transform: translateY(30px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .message::before {
@@ -1110,10 +955,6 @@
             border-bottom-right-radius: 4px;
         }
 
-        :root[data-theme="light"] .message.user {
-            color: white;
-        }
-
         .message.ai {
             align-self: flex-start;
             background: rgba(139, 92, 246, 0.08);
@@ -1141,24 +982,13 @@
         }
 
         /* Message Content HTML Styling */
-        .message-content {
-            line-height: 1.7;
-        }
+        .message-content { line-height: 1.7; }
 
-        .message-content p {
-            margin-bottom: 12px;
-        }
+        .message-content p { margin-bottom: 12px; }
+        .message-content p:last-child { margin-bottom: 0; }
 
-        .message-content p:last-child {
-            margin-bottom: 0;
-        }
-
-        .message-content h1, 
-        .message-content h2, 
-        .message-content h3, 
-        .message-content h4, 
-        .message-content h5, 
-        .message-content h6 {
+        .message-content h1, .message-content h2, .message-content h3,
+        .message-content h4, .message-content h5, .message-content h6 {
             margin: 16px 0 8px 0;
             font-weight: 600;
             line-height: 1.4;
@@ -1167,10 +997,10 @@
         .message-content h1 { font-size: 1.5rem; }
         .message-content h2 { font-size: 1.3rem; }
         .message-content h3 { font-size: 1.15rem; }
+
         .message-content h4 { font-size: 1.05rem; }
 
-        .message-content ul, 
-        .message-content ol {
+        .message-content ul, .message-content ol {
             margin: 12px 0;
             padding-left: 24px;
         }
@@ -1180,16 +1010,8 @@
             line-height: 1.6;
         }
 
-        .message-content strong, 
-        .message-content b {
-            font-weight: 600;
-            color: var(--text-main);
-        }
-
-        .message-content em, 
-        .message-content i {
-            font-style: italic;
-        }
+        .message-content strong, .message-content b { font-weight: 600; color: var(--text-main); }
+        .message-content em, .message-content i { font-style: italic; }
 
         .message-content code {
             background: rgba(139, 92, 246, 0.15);
@@ -1209,9 +1031,7 @@
             border: 1px solid var(--border-color);
         }
 
-        :root[data-theme="light"] .message-content pre {
-            background: rgba(139, 92, 246, 0.08);
-        }
+        :root[data-theme="light"] .message-content pre { background: rgba(139, 92, 246, 0.08); }
 
         .message-content pre code {
             background: none;
@@ -1233,9 +1053,7 @@
             transition: color 0.2s ease;
         }
 
-        .message-content a:hover {
-            color: var(--primary);
-        }
+        .message-content a:hover { color: var(--primary); }
 
         .message-content table {
             width: 100%;
@@ -1243,8 +1061,7 @@
             margin: 12px 0;
         }
 
-        .message-content th, 
-        .message-content td {
+        .message-content th, .message-content td {
             border: 1px solid var(--border-color);
             padding: 8px 12px;
             text-align: left;
@@ -1262,17 +1079,9 @@
         }
 
         /* Insight Content HTML Styling */
-        .insight-content p {
-            margin-bottom: 8px;
-        }
-
-        .insight-content p:last-child {
-            margin-bottom: 0;
-        }
-
-        .insight-content strong {
-            color: var(--text-main);
-        }
+        .insight-content p { margin-bottom: 8px; }
+        .insight-content p:last-child { margin-bottom: 0; }
+        .insight-content strong { color: var(--text-main); }
 
         .insight-content code {
             background: rgba(139, 92, 246, 0.15);
@@ -1330,13 +1139,9 @@
             line-height: 1.5;
         }
 
-        textarea:disabled {
-            cursor: not-allowed;
-        }
+        textarea:disabled { cursor: not-allowed; }
 
-        textarea::placeholder {
-            transition: color 0.3s ease;
-        }
+        textarea::placeholder { transition: color 0.3s ease; }
 
         button#send-btn {
             background: var(--primary);
@@ -1367,10 +1172,7 @@
             transition: width 0.3s ease, height 0.3s ease;
         }
 
-        button#send-btn:hover::before {
-            width: 100%;
-            height: 100%;
-        }
+        button#send-btn:hover::before { width: 100%; height: 100%; }
 
         button#send-btn:hover {
             background: #7c3aed;
@@ -1378,9 +1180,7 @@
             box-shadow: 0 4px 15px var(--primary-glow);
         }
 
-        button#send-btn:active {
-            transform: scale(0.95);
-        }
+        button#send-btn:active { transform: scale(0.95); }
 
         button#send-btn svg {
             width: 20px;
@@ -1390,9 +1190,7 @@
             transition: transform 0.3s ease;
         }
 
-        button#send-btn:hover svg {
-            transform: translateX(2px) rotate(15deg);
-        }
+        button#send-btn:hover svg { transform: translateX(2px) rotate(15deg); }
 
         button#send-btn:disabled {
             background: var(--border-color);
@@ -1400,10 +1198,7 @@
             transform: none;
         }
 
-        button#send-btn:disabled:hover::before {
-            width: 0;
-            height: 0;
-        }
+        button#send-btn:disabled:hover::before { width: 0; height: 0; }
 
         /* Sidebar */
         aside.meta-insights {
@@ -1422,14 +1217,8 @@
         }
 
         @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         :root[data-theme="light"] aside.meta-insights {
@@ -1524,22 +1313,10 @@
         }
 
         /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-muted);
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
         /* Enhanced Thinking Animation */
         .thinking-container {
@@ -1561,10 +1338,7 @@
             75% { transform: scale(1.1) rotate(5deg); }
         }
 
-        .thinking-dots {
-            display: flex;
-            gap: 6px;
-        }
+        .thinking-dots { display: flex; gap: 6px; }
 
         .thinking-dots span {
             width: 10px;
@@ -1579,14 +1353,8 @@
         .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
 
         @keyframes thinkingDot {
-            0%, 80%, 100% {
-                transform: scale(0.6);
-                opacity: 0.4;
-            }
-            40% {
-                transform: scale(1.2);
-                opacity: 1;
-            }
+            0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+            40% { transform: scale(1.2); opacity: 1; }
         }
 
         .thinking-text {
@@ -1623,19 +1391,11 @@
         .neural-node:nth-child(5) { animation-delay: 0.6s; }
 
         @keyframes neuralPulse {
-            0%, 100% {
-                transform: scale(1);
-                background: var(--primary);
-            }
-            50% {
-                transform: scale(1.5);
-                background: var(--secondary);
-            }
+            0%, 100% { transform: scale(1); background: var(--primary); }
+            50% { transform: scale(1.5); background: var(--secondary); }
         }
 
-        .pulse-text {
-            animation: pulseText 1.5s infinite;
-        }
+        .pulse-text { animation: pulseText 1.5s infinite; }
 
         @keyframes pulseText {
             0%, 100% { opacity: 0.5; }
@@ -1644,24 +1404,14 @@
 
         /* Responsive */
         @media (max-width: 1200px) {
-            .app-container {
-                padding: 15px;
-            }
-            
-            aside.meta-insights {
-                max-width: 350px;
-            }
-            
-            .chat-history {
-                padding: 20px;
-            }
+            .app-container { padding: 15px; }
+            aside.meta-insights { max-width: 350px; }
+            .chat-history { padding: 20px; }
         }
 
         @media (max-width: 900px) {
-            main {
-                flex-direction: column;
-            }
-            
+            main { flex-direction: column; }
+
             aside.meta-insights {
                 max-width: 100%;
                 order: -1;
@@ -1670,91 +1420,52 @@
                 gap: 15px;
                 padding: 15px;
             }
-            
-            aside.meta-insights h3 {
-                display: none;
-            }
-            
-            .insight-card {
-                flex: 1;
-                max-height: none;
-            }
-            
-            .insight-content {
-                max-height: 100px;
-            }
-            
+
+            aside.meta-insights h3 { display: none; }
+            .insight-card { flex: 1; max-height: none; }
+            .insight-content { max-height: 100px; }
+
             header {
                 flex-direction: column;
                 gap: 15px;
                 padding: 15px 20px;
             }
-            
+
             .header-controls {
                 width: 100%;
                 justify-content: center;
                 flex-wrap: wrap;
                 gap: 12px;
             }
-            
-            .model-selector {
-                flex-direction: column;
-                width: 100%;
-                gap: 10px;
-            }
-            
-            .model-selector label {
-                text-align: center;
-            }
-            
-            .custom-select {
-                width: 100%;
-                min-width: unset;
-            }
-            
-            .select-trigger {
-                width: 100%;
-            }
-            
-            .chat-interface {
-                min-height: 400px;
-            }
-            
-            .welcome-message {
-                margin-top: 10%;
-            }
-            
-            .welcome-message h2 {
-                font-size: 1.5rem;
-            }
+
+            .model-selector { flex-direction: column; width: 100%; gap: 10px; }
+            .model-selector label { text-align: center; }
+            .custom-select { width: 100%; min-width: unset; }
+            .select-trigger { width: 100%; }
+            .chat-interface { min-height: 400px; }
+            .welcome-message { margin-top: 10%; }
+            .welcome-message h2 { font-size: 1.5rem; }
         }
 
         @media (max-width: 600px) {
-            .app-container {
-                padding: 10px;
-            }
-            
+            .app-container { padding: 10px; }
+
             header {
                 padding: 12px 15px;
                 border-radius: 12px;
                 margin-bottom: 10px;
             }
-            
-            .logo h1 {
-                font-size: 1.2rem;
-            }
-            
-            .logo-icon {
-                font-size: 1.2rem;
-            }
-            
+
+            .logo h1 { font-size: 1.2rem; }
+            .logo-icon { font-size: 1.2rem; }
+
             .message {
                 max-width: 95%;
                 padding: 12px 15px;
                 padding-left: 50px;
                 font-size: 0.9rem;
             }
-            
+
             .message::before {
                 width: 30px;
                 height: 30px;
@@ -1762,178 +1473,64 @@
                 top: 10px;
                 font-size: 0.8rem;
             }
-            
-            .modal-content {
-                width: 98%;
-                max-height: 90vh;
-                border-radius: 16px;
-            }
-            
-            .modal-header {
-                padding: 20px;
-            }
-            
-            .modal-header h2 {
-                font-size: 1.3rem;
-            }
-            
-            .modal-body {
-                padding: 20px;
-            }
-            
-            .modal-intro {
-                font-size: 1rem;
-            }
-            
-            .modal-body h3 {
-                font-size: 1.1rem;
-            }
-            
-            .model-cards {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-            
-            .model-card {
-                padding: 15px;
-            }
-            
-            .model-card h4 {
-                font-size: 0.9rem;
-            }
-            
-            .feature-list li {
-                padding: 10px 0;
-                font-size: 0.9rem;
-            }
-            
-            .input-area {
-                padding: 12px;
-            }
-            
-            .input-wrapper {
-                padding: 8px;
-                border-radius: 10px;
-            }
-            
-            textarea {
-                font-size: 0.95rem;
-            }
-            
-            button#send-btn {
-                width: 36px;
-                height: 36px;
-            }
-            
-            .theme-toggle, .about-btn, .clear-chat-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 1rem;
-            }
-            
-            .chat-history {
-                padding: 15px;
-                gap: 15px;
-            }
-            
+
+            .modal-content { width: 98%; max-height: 90vh; border-radius: 16px; }
+            .modal-header { padding: 20px; }
+            .modal-header h2 { font-size: 1.3rem; }
+            .modal-body { padding: 20px; }
+            .modal-intro { font-size: 1rem; }
+            .modal-body h3 { font-size: 1.1rem; }
+            .model-cards { grid-template-columns: 1fr; gap: 12px; }
+            .model-card { padding: 15px; }
+            .model-card h4 { font-size: 0.9rem; }
+            .feature-list li { padding: 10px 0; font-size: 0.9rem; }
+
+            .input-area { padding: 12px; }
+            .input-wrapper { padding: 8px; border-radius: 10px; }
+            textarea { font-size: 0.95rem; }
+
+            button#send-btn { width: 36px; height: 36px; }
+
+            .icon-btn { width: 40px; height: 40px; font-size: 1rem; }
+
+            .chat-history { padding: 15px; gap: 15px; }
+
             aside.meta-insights {
                 flex-direction: column;
                 max-height: 200px;
                 gap: 10px;
             }
-            
-            .insight-card {
-                padding: 12px;
-            }
-            
-            .insight-card h4 {
-                font-size: 0.8rem;
-                margin-bottom: 8px;
-            }
-            
-            .insight-content {
-                font-size: 0.8rem;
-                max-height: 60px;
-            }
-            
-            .select-trigger {
-                padding: 8px 12px;
-                min-height: 40px;
-                font-size: 0.85rem;
-            }
-            
-            .select-item {
-                padding: 8px 10px;
-                font-size: 0.85rem;
-            }
-            
-            .select-item-icon {
-                font-size: 1.1rem;
-                width: 24px;
-            }
-            
-            .select-item-description {
-                font-size: 0.7rem;
-            }
-            
-            .github-link {
-                padding: 8px 16px;
-                font-size: 0.85rem;
-            }
-            
+
+            .insight-card { padding: 12px; }
+            .insight-card h4 { font-size: 0.8rem; margin-bottom: 8px; }
+            .insight-content { font-size: 0.8rem; max-height: 60px; }
+
+            .select-trigger { padding: 8px 12px; min-height: 40px; font-size: 0.85rem; }
+            .select-item { padding: 8px 10px; font-size: 0.85rem; }
+            .select-item-icon { font-size: 1.1rem; width: 24px; }
+            .select-item-description { font-size: 0.7rem; }
+            .github-link { padding: 8px 16px; font-size: 0.85rem; }
+
             /* Hide particles on small screens for performance */
-            .particles {
-                display: none;
-            }
-            
-            .bg-doodles {
-                display: none;
-            }
-            
-            .chat-doodles {
-                display: none;
-            }
+            .particles, .bg-doodles, .chat-doodles { display: none; }
         }
 
         @media (max-width: 400px) {
-            .logo h1 {
-                font-size: 1rem;
-            }
-            
-            .header-controls {
-                gap: 8px;
-            }
-            
-            .theme-toggle, .about-btn, .clear-chat-btn {
-                width: 36px;
-                height: 36px;
-                font-size: 0.9rem;
-            }
-            
-            .message {
-                padding-left: 45px;
-            }
-            
-            .message::before {
-                width: 26px;
-                height: 26px;
-                font-size: 0.7rem;
-            }
+            .logo h1 { font-size: 1rem; }
+            .header-controls { gap: 8px; }
+            .icon-btn { width: 36px; height: 36px; font-size: 0.9rem; }
+            .message { padding-left: 45px; }
+            .message::before { width: 26px; height: 26px; font-size: 0.7rem; }
         }
 
         /* Tablet landscape */
         @media (min-width: 901px) and (max-width: 1100px) {
-            aside.meta-insights {
-                max-width: 300px;
-            }
+            aside.meta-insights { max-width: 300px; }
         }
 
         /* High DPI / Retina displays */
         @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-            .particle {
-                width: 3px;
-                height: 3px;
-            }
+            .particle { width: 3px; height: 3px; }
         }
 
         /* Reduced motion preference */
@@ -1947,18 +1544,9 @@
 
         /* Print styles */
         @media print {
-            .particles, .bg-doodles, .chat-doodles {
-                display: none;
-            }
-            
-            header, aside, .input-area {
-                display: none;
-            }
-            
-            .chat-interface {
-                border: none;
-                box-shadow: none;
-            }
+            .particles, .bg-doodles, .chat-doodles { display: none; }
+            header, aside, .input-area { display: none; }
+            .chat-interface { border: none; box-shadow: none; }
         }
     </style>
 </head>
@@ -2011,15 +1599,15 @@
             <div class="header-controls">
                 <div class="model-selector">
                     <label><i class="fas fa-robot"></i> Select Intelligence:</label>
-                    
+
                     <!-- Custom Select Component -->
                     <div class="custom-select" id="custom-select">
                         <select id="model-select" class="native-select">
                             <option value="nvidia">Meta-Agent (Nvidia)</option>
-                            <option value="mimo">Mimo</option>
-                            <option value="deepseek">DeepSeek</option>
+                            <option value="mimo">NorthCode</option>
+                            <option value="deepseek">NexAGI</option>
                         </select>
-                        
+
                         <button type="button" class="select-trigger" id="select-trigger" aria-haspopup="listbox" aria-expanded="false">
                             <span class="select-trigger-content">
                                 <span class="select-trigger-icon">🧠</span>
@@ -2027,11 +1615,11 @@
                             </span>
                             <i class="fas fa-chevron-down select-trigger-arrow"></i>
                         </button>
-                        
+
                         <div class="select-content" id="select-content" role="listbox">
                             <div class="select-viewport">
                                 <div class="select-label">Meta-Agent</div>
-                                
+
                                 <div class="select-item selected" data-value="nvidia" role="option" tabindex="0">
                                     <span class="select-item-icon">🧠</span>
                                     <div class="select-item-content">
@@ -2040,23 +1628,23 @@
                                     </div>
                                     <span class="select-item-check"><i class="fas fa-check"></i></span>
                                 </div>
-                                
+
                                 <div class="select-separator"></div>
                                 <div class="select-label">Individual Models</div>
-                                
+
                                 <div class="select-item" data-value="mimo" role="option" tabindex="0">
                                     <span class="select-item-icon">💎</span>
                                     <div class="select-item-content">
-                                        <span class="select-item-title">Mimo</span>
+                                        <span class="select-item-title">NorthCode</span>
                                         <span class="select-item-description">Precise contextual understanding</span>
                                     </div>
                                     <span class="select-item-check"><i class="fas fa-check"></i></span>
                                 </div>
-                                
+
                                 <div class="select-item" data-value="deepseek" role="option" tabindex="0">
                                     <span class="select-item-icon">🧭</span>
                                     <div class="select-item-content">
-                                        <span class="select-item-title">DeepSeek</span>
+                                        <span class="select-item-title">NexAGI</span>
                                         <span class="select-item-description">Deep reasoning & analytics</span>
                                     </div>
                                     <span class="select-item-check"><i class="fas fa-check"></i></span>
@@ -2065,14 +1653,17 @@
                         </div>
                     </div>
                 </div>
-                <button id="clear-chat-btn" class="clear-chat-btn" aria-label="Clear chat">
+                <button id="clear-chat-btn" class="icon-btn clear-chat-btn" aria-label="Clear chat">
                     <i class="fas fa-trash-alt"></i>
                 </button>
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                <button id="theme-toggle" class="icon-btn theme-toggle" aria-label="Toggle theme">
                     <i class="fas fa-sun"></i>
                 </button>
-                <button id="about-btn" class="about-btn" aria-label="About">
+                <button id="about-btn" class="icon-btn about-btn" aria-label="About">
                     <i class="fas fa-info-circle"></i>
+                </button>
+                <button id="logout-btn" class="icon-btn logout-btn" aria-label="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
                 </button>
             </div>
         </header>
@@ -2095,8 +1686,8 @@
                     <h3><i class="fas fa-layer-group"></i> How It Works</h3>
                     <p>
                         The Meta-Agent employs a sophisticated multi-model approach where it consults both
-                        <strong>Mimo</strong> and <strong>DeepSeek</strong> AI models simultaneously.
-                        These individual responses are then synthesized by the <strong>Nvidia Nemotron</strong>
+                        <strong>NorthCode</strong> and <strong>NexAGI</strong> AI models simultaneously.
+                        These individual responses are then synthesized by Nvidia Nemotron</strong>
                         to produce a comprehensive, accurate, and content-rich final answer.
                     </p>
 
@@ -2114,19 +1705,19 @@
                         <div class="model-card">
                             <div class="model-icon">🧠</div>
                             <h4>Nvidia Nemotron</h4>
-                            <p>Nemotron-3-nano-30b-a3b</p>
-                            <p>Synthesizes responses from Mimo and DeepSeek for optimal accuracy.</p>
+                            <p>Nemotron-3-ultra-550b-a55b</p>
+                            <p>Synthesizes responses from NorthCode and NexAGI for optimal accuracy.</p>
                         </div>
                         <div class="model-card">
                             <div class="model-icon">💎</div>
-                            <h4>Mimo</h4>
-                            <p>Mimo-v2-flash</p>
+                            <h4>NorthCode</h4>
+                            <p>NorthCode-mini</p>
                             <p>Precise and contextual understanding.</p>
                         </div>
                         <div class="model-card">
                             <div class="model-icon">🧭</div>
-                            <h4>DeepSeek</h4>
-                            <p>Deepseek-r1t2-chimera</p>
+                            <h4>NexAGI</h4>
+                            <p>nex-n2.5-pro</p>
                             <p>Deep reasoning and analytical responses.</p>
                         </div>
                     </div>
@@ -2160,7 +1751,7 @@
                 </div>
                 <div id="chat-history" class="chat-history">
                     <div class="welcome-message">
-                        <h2>Welcome to the Meta-Mind</h2>
+                        <h2>Welcome to the Meta-Agent</h2>
                         <p>Select a model and start a conversation. The Meta-Agent synthesizes insights from multiple sub-models.</p>
                     </div>
                 </div>
@@ -2181,11 +1772,11 @@
             <aside class="meta-insights" id="meta-insights-panel">
                 <h3>Meta-Agent Insights</h3>
                 <div class="insight-card">
-                    <h4>Mimo Query</h4>
+                    <h4>NorthCode Query</h4>
                     <div id="insight-mimo" class="insight-content waiting">Waiting for query...</div>
                 </div>
                 <div class="insight-card">
-                    <h4>DeepSeek Query</h4>
+                    <h4>NexAGI Query</h4>
                     <div id="insight-deepseek" class="insight-content waiting">Waiting for query...</div>
                 </div>
             </aside>
@@ -2193,19 +1784,42 @@
     </div>
 
     <script>
-    
         // ============================================
         // API Configuration
         // ============================================
         const API_CONFIG = {
             endpoints: {
-                nvidia: '/api/nvidia/',           // Meta-Agent endpoint
-                mimo: '/api/mimo/',               // Mimo model endpoint
-                deepseek: '/api/deepseek/',       // DeepSeek model endpoint
-                mimoInsight: '/api/nvidia/firstmodelresponse',      // Mimo insight for meta-agent
-                deepseekInsight: '/api/nvidia/secondmodelresponse'  // DeepSeek insight for meta-agent
-            }
+                nvidia: '/api/nvidia/',                              // Meta-Agent endpoint
+                mimo: '/api/northcode/',                             // NorthCode model endpoint
+                deepseek: '/api/nexagi/',                            // NexAGI model endpoint
+                mimoInsight: '/api/nvidia/firstmodelresponse',       // NorthCode insight for meta-agent
+                deepseekInsight: '/api/nvidia/secondmodelresponse',  // NexAGI insight for meta-agent
+                logout: '/api/logout'                                // Logout endpoint
+            },
+            loginUrl: '/login'
         };
+
+        // Parse API response: JSON (with response/message/content fields) or plain text
+        function parseResponse(rawText) {
+            try {
+                const jsonData = JSON.parse(rawText);
+                return jsonData.response || jsonData.message || jsonData.content || JSON.stringify(jsonData);
+            } catch {
+                return rawText; // Plain text response
+            }
+        }
+
+        // Render an insight card from a fetch Response
+        async function renderInsight(element, response, fallbackText) {
+            if (!response.ok) {
+                element.textContent = 'Failed to load insight';
+                return;
+            }
+            const raw = await response.text();
+            const text = raw ? parseResponse(raw) : 'No insight available';
+            element.innerHTML = sanitizeHtml(text);
+            element.classList.remove('waiting');
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             const chatHistory = document.getElementById('chat-history');
@@ -2214,556 +1828,223 @@
             const modelSelect = document.getElementById('model-select');
             const metaPanel = document.getElementById('meta-insights-panel');
             const insightMimo = document.getElementById('insight-mimo');
-            const insightDeepseek = document.getElementById('insight-deepseek');
-            const themeToggle = document.getElementById('theme-toggle');
-            const inputArea = document.getElementById('input-area');
-            const inputWrapper = document.getElementById('input-wrapper');
 
-            // Custom Select Elements
+            const insightDeepseek = document.getElementById('insight-deepseek');
+
+            // ============================================
+            // Custom Select Component
+            // ============================================
             const customSelect = document.getElementById('custom-select');
             const selectTrigger = document.getElementById('select-trigger');
             const selectContent = document.getElementById('select-content');
-            const selectItems = document.querySelectorAll('.select-item');
+            const selectText = selectTrigger.querySelector('.select-trigger-text');
+            const selectIcon = selectTrigger.querySelector('.select-trigger-icon');
+            const selectItems = selectContent.querySelectorAll('.select-item');
+            let highlightedIndex = 0;
 
-            let isThinking = false;
-            let highlightedIndex = -1;
-
-            // Custom Select Functionality
             function openSelect() {
-                selectTrigger.classList.add('open');
                 selectContent.classList.add('open');
+                selectTrigger.classList.add('open');
                 selectTrigger.setAttribute('aria-expanded', 'true');
-                highlightedIndex = Array.from(selectItems).findIndex(item => item.classList.contains('selected'));
+                const selected = selectContent.querySelector('.select-item.selected');
+                highlightedIndex = Array.from(selectItems).indexOf(selected);
                 updateHighlight();
             }
 
             function closeSelect() {
-                selectTrigger.classList.remove('open');
                 selectContent.classList.remove('open');
+                selectTrigger.classList.remove('open');
                 selectTrigger.setAttribute('aria-expanded', 'false');
-                highlightedIndex = -1;
-                selectItems.forEach(item => item.classList.remove('highlighted'));
-            }
-
-            function toggleSelect() {
-                if (selectContent.classList.contains('open')) {
-                    closeSelect();
-                } else {
-                    openSelect();
-                }
             }
 
             function updateHighlight() {
-                selectItems.forEach((item, index) => {
-                    if (index === highlightedIndex) {
-                        item.classList.add('highlighted');
-                        item.scrollIntoView({ block: 'nearest' });
-                    } else {
-                        item.classList.remove('highlighted');
-                    }
-                });
+                selectItems.forEach((item, i) => item.classList.toggle('highlighted', i === highlightedIndex));
             }
 
-            function selectValue(value) {
-                const selectedItem = document.querySelector(`.select-item[data-value="${value}"]`);
-                if (!selectedItem) return;
+            function selectOption(item) {
+                const value = item.dataset.value;
+                const icon = item.querySelector('.select-item-icon').textContent;
+                const title = item.querySelector('.select-item-title').textContent;
 
                 modelSelect.value = value;
-                selectItems.forEach(item => item.classList.remove('selected'));
-                selectedItem.classList.add('selected');
+                selectText.textContent = title;
+                selectIcon.textContent = icon;
 
-                const icon = selectedItem.querySelector('.select-item-icon').textContent;
-                const title = selectedItem.querySelector('.select-item-title').textContent;
-                selectTrigger.querySelector('.select-trigger-icon').textContent = icon;
-                selectTrigger.querySelector('.select-trigger-text').textContent = title;
+                selectItems.forEach(i => i.classList.toggle('selected', i === item));
+
+                const isMeta = value === 'nvidia';
+                metaPanel.classList.toggle('disabled', !isMeta);
+                insightMimo.classList.toggle('waiting', true);
+                insightDeepseek.classList.toggle('waiting', true);
+                if (isMeta) {
+                    insightMimo.textContent = 'Waiting for query...';
+                    insightDeepseek.textContent = 'Waiting for query...';
+                }
 
                 closeSelect();
-                modelSelect.dispatchEvent(new Event('change'));
-
-                selectedItem.style.transform = 'scale(0.98)';
-                setTimeout(() => {
-                    selectedItem.style.transform = '';
-                }, 150);
+                selectTrigger.focus();
             }
 
-            // Event Listeners for Custom Select
             selectTrigger.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (!customSelect.classList.contains('disabled')) {
-                    toggleSelect();
-                }
-            });
-
-            selectItems.forEach(item => {
-                item.addEventListener('click', () => {
-                    selectValue(item.dataset.value);
-                });
-
-                item.addEventListener('mouseenter', () => {
-                    highlightedIndex = Array.from(selectItems).indexOf(item);
-                    updateHighlight();
-                });
+                e.stopPropagation();
+                selectContent.classList.contains('open') ? closeSelect() : openSelect();
             });
 
             selectTrigger.addEventListener('keydown', (e) => {
-                if (customSelect.classList.contains('disabled')) return;
-
                 switch (e.key) {
-                    case 'Enter':
-                    case ' ':
+                    case 'Enter': case ' ':
                         e.preventDefault();
-                        if (selectContent.classList.contains('open') && highlightedIndex >= 0) {
-                            selectValue(selectItems[highlightedIndex].dataset.value);
-                        } else {
-                            toggleSelect();
-                        }
+                        selectContent.classList.contains('open') ? selectOption(selectItems[highlightedIndex]) : openSelect();
                         break;
+                    case 'Escape': closeSelect(); break;
                     case 'ArrowDown':
                         e.preventDefault();
-                        if (!selectContent.classList.contains('open')) {
-                            openSelect();
-                        } else {
-                            highlightedIndex = Math.min(highlightedIndex + 1, selectItems.length - 1);
-                            updateHighlight();
-                        }
+                        if (!selectContent.classList.contains('open')) { openSelect(); return; }
+                        highlightedIndex = (highlightedIndex + 1) % selectItems.length;
+                        updateHighlight();
+                        selectItems[highlightedIndex].focus();
                         break;
                     case 'ArrowUp':
                         e.preventDefault();
-                        if (selectContent.classList.contains('open')) {
-                            highlightedIndex = Math.max(highlightedIndex - 1, 0);
-                            updateHighlight();
-                        }
-                        break;
-                    case 'Escape':
-                        closeSelect();
-                        break;
-                    case 'Tab':
-                        closeSelect();
+                        if (!selectContent.classList.contains('open')) { openSelect(); return; }
+                        highlightedIndex = (highlightedIndex - 1 + selectItems.length) % selectItems.length;
+                        updateHighlight();
+                        selectItems[highlightedIndex].focus();
                         break;
                 }
+            });
+
+            selectItems.forEach((item, i) => {
+                item.addEventListener('click', () => selectOption(item));
+                item.addEventListener('mouseenter', () => { highlightedIndex = i; updateHighlight(); });
+                item.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        selectOption(item);
+                    }
+                });
             });
 
             document.addEventListener('click', (e) => {
-                if (!customSelect.contains(e.target)) {
-                    closeSelect();
-                }
+                if (!customSelect.contains(e.target)) closeSelect();
             });
 
-            function setSelectDisabled(disabled) {
-                if (disabled) {
-                    customSelect.classList.add('disabled');
-                    closeSelect();
-                } else {
-                    customSelect.classList.remove('disabled');
-                }
+            // Restore saved theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                updateThemeIcon();
             }
 
-            // Theme Management
-            const currentTheme = localStorage.getItem('theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', currentTheme);
-            updateThemeIcon(currentTheme);
-
-            themeToggle.addEventListener('click', () => {
-                const currentTheme = document.documentElement.getAttribute('data-theme');
-                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                updateThemeIcon(newTheme);
+            // Theme Toggle
+            document.getElementById('theme-toggle').addEventListener('click', () => {
+                const html = document.documentElement;
+                const current = html.getAttribute('data-theme') || 'dark';
+                const next = current === 'dark' ? 'light' : 'dark';
+                html.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+                updateThemeIcon();
             });
 
-            function updateThemeIcon(theme) {
-                const icon = themeToggle.querySelector('i');
-                if (theme === 'dark') {
-                    icon.className = 'fas fa-sun';
-                } else {
-                    icon.className = 'fas fa-moon';
-                }
+            function updateThemeIcon() {
+                const icon = document.querySelector('#theme-toggle i');
+                const isDark = !document.documentElement.getAttribute('data-theme') ||
+                               document.documentElement.getAttribute('data-theme') === 'dark';
+                icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
             }
 
-            // About Modal Management
-            const aboutBtn = document.getElementById('about-btn');
+            // About Modal
             const aboutModal = document.getElementById('about-modal');
-            const modalClose = document.getElementById('modal-close');
-
-            aboutBtn.addEventListener('click', () => {
+            document.getElementById('about-btn').addEventListener('click', () => {
                 aboutModal.classList.add('show');
             });
-
-            modalClose.addEventListener('click', () => {
+            document.getElementById('modal-close').addEventListener('click', () => {
                 aboutModal.classList.remove('show');
             });
-
             aboutModal.addEventListener('click', (e) => {
-                if (e.target === aboutModal) {
-                    aboutModal.classList.remove('show');
-                }
+                if (e.target === aboutModal) aboutModal.classList.remove('show');
             });
-
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && aboutModal.classList.contains('show')) {
                     aboutModal.classList.remove('show');
                 }
             });
 
-            // Logo click to reload
-            const logo = document.querySelector('.logo');
-            logo.addEventListener('click', () => {
-                window.location.reload();
+            // Logout
+            document.getElementById('logout-btn').addEventListener('click',() => {
+                window.location.href = API_CONFIG.endpoints.logout;
             });
 
-            // Clear Chat Functionality
-            const clearChatBtn = document.getElementById('clear-chat-btn');
-            
-            clearChatBtn.addEventListener('click', () => {
-                clearChat();
-            });
-
-            function clearChat() {
-                const messages = chatHistory.querySelectorAll('.message');
-                
-                if (messages.length === 0) return;
-                
-                messages.forEach((msg, index) => {
-                    setTimeout(() => {
-                        msg.style.animation = 'messageSlideOut 0.3s ease forwards';
-                        setTimeout(() => {
-                            msg.remove();
-                        }, 300);
-                    }, index * 50);
-                });
-
-                setTimeout(() => {
-                    const welcomeExists = document.querySelector('.welcome-message');
-                    if (!welcomeExists) {
-                        const welcome = document.createElement('div');
-                        welcome.className = 'welcome-message';
-                        welcome.innerHTML = `
-                            <h2>Welcome to the Meta-Mind</h2>
-                            <p>Select a model and start a conversation. The Meta-Agent synthesizes insights from multiple sub-models.</p>
-                        `;
-                        chatHistory.appendChild(welcome);
-                    }
-                }, messages.length * 50 + 350);
-
-                clearInsights();
-            }
-
-            // Initial state check
-            updatePanelVisibility();
-
-            modelSelect.addEventListener('change', () => {
-                updatePanelVisibility();
-                selectTrigger.style.transform = 'scale(1.02)';
-                selectTrigger.style.boxShadow = '0 0 20px var(--primary-glow)';
-                setTimeout(() => {
-                    selectTrigger.style.transform = '';
-                    selectTrigger.style.boxShadow = '';
-                }, 300);
-            });
-
-            function updatePanelVisibility() {
-                if (modelSelect.value === 'nvidia') {
-                    metaPanel.style.opacity = '1';
-                    metaPanel.style.transform = 'translateX(0)';
-                    metaPanel.style.pointerEvents = 'all';
-                } else {
-                    metaPanel.style.opacity = '0.5';
-                    metaPanel.style.pointerEvents = 'none';
-                }
-            }
-
-            // Auto-resize textarea
-            userInput.addEventListener('input', () => {
-                userInput.style.height = 'auto';
-                userInput.style.height = userInput.scrollHeight + 'px';
-            });
-
-            // Handle Enter and Shift+Enter
-            userInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey && !isThinking) {
-                    e.preventDefault();
-                    handleSend();
-                }
-            });
-
-            sendBtn.addEventListener('click', () => {
-                if (!isThinking) {
-                    handleSend();
-                }
-            });
-
-            function setThinkingState(thinking) {
-                isThinking = thinking;
-                
-                if (thinking) {
-                    inputArea.classList.add('disabled');
-                    inputWrapper.classList.add('disabled');
-                    userInput.disabled = true;
-                    sendBtn.disabled = true;
-                    userInput.placeholder = "AI is thinking... Please wait";
-                    setSelectDisabled(true);
-                } else {
-                    inputArea.classList.remove('disabled');
-                    inputWrapper.classList.remove('disabled');
-                    userInput.disabled = false;
-                    sendBtn.disabled = false;
-                    userInput.placeholder = "Ask anything... (Shift+Enter for new line)";
-                    setSelectDisabled(false);
-                }
-            }
-
-            async function handleSend() {
-                const message = userInput.value.trim();
-                if (!message) return;
-
-                userInput.value = '';
-                userInput.style.height = 'auto';
-
-                addMessage(message, 'user');
-
-                setThinkingState(true);
-                const loadingId = addThinkingMessage();
-
-                const model = modelSelect.value;
-                const encodedMessage = encodeURIComponent(message);
-                const endpoint = API_CONFIG.endpoints[model] + encodedMessage;
-
-                try {
-                    const response = await fetch(endpoint, {
-                        method: 'GET',
-                        headers: {
-                            'Accept': 'application/json',
-                        }
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-
-                    const data = await response.text();
-                    
-                    removeMessage(loadingId);
-                    
-                    // Handle response - could be plain text or JSON, may contain HTML
-                    let aiResponse;
-                    try {
-                        const jsonData = JSON.parse(data);
-                        aiResponse = jsonData.response || jsonData.message || jsonData.content || JSON.stringify(jsonData);
-                    } catch {
-                        aiResponse = data; // Plain text response
-                    }
-                    
-                    addMessage(aiResponse, 'ai', getModelDisplayName(model));
-
-                    if (model === 'nvidia') {
-                        fetchInsights();
-                    } else {
-                        clearInsights();
-                    }
-
-                } catch (error) {
-                    removeMessage(loadingId);
-                    addMessage(`Error: ${error.message}. Please check your API connection.`, 'ai', 'System', true);
-                    console.error('API Error:', error);
-                } finally {
-                    setThinkingState(false);
-                }
-            }
-
-            async function fetchInsights() {
-                insightMimo.innerHTML = '<span class="pulse-text">🔄 Fetching Mimo insights...</span>';
-                insightDeepseek.innerHTML = '<span class="pulse-text">🔄 Fetching DeepSeek insights...</span>';
-
-                try {
-                    // Fetch both insights in parallel
-                    const [mimoResponse, deepseekResponse] = await Promise.all([
-                        fetch(API_CONFIG.endpoints.mimoInsight, {
-                            method: 'GET',
-                            headers: { 'Accept': 'application/json' }
-                        }),
-                        fetch(API_CONFIG.endpoints.deepseekInsight, {
-                            method: 'GET',
-                            headers: { 'Accept': 'application/json' }
-                        })
-                    ]);
-
-                    // Process Mimo insight
-                    if (mimoResponse.ok) {
-                        const mimoData = await mimoResponse.text();
-                        let mimoText;
-                        try {
-                            const jsonData = JSON.parse(mimoData);
-                            mimoText = jsonData.response || jsonData.message || jsonData.content || JSON.stringify(jsonData);
-                        } catch {
-                            mimoText = mimoData || 'No insight available';
-                        }
-                        // Render HTML content
-                        insightMimo.innerHTML = sanitizeHtml(mimoText);
-                        insightMimo.classList.remove('waiting');
-                    } else {
-                        insightMimo.textContent = 'Failed to load insight';
-                    }
-
-                    // Process DeepSeek insight
-                    if (deepseekResponse.ok) {
-                        const deepseekData = await deepseekResponse.text();
-                        let deepseekText;
-                        try {
-                            const jsonData = JSON.parse(deepseekData);
-                            deepseekText = jsonData.response || jsonData.message || jsonData.content || JSON.stringify(jsonData);
-                        } catch {
-                            deepseekText = deepseekData || 'No insight available';
-                        }
-                        // Render HTML content
-                        insightDeepseek.innerHTML = sanitizeHtml(deepseekText);
-                        insightDeepseek.classList.remove('waiting');
-                    } else {
-                        insightDeepseek.textContent = 'Failed to load insight';
-                    }
-
-                } catch (error) {
-                    insightMimo.textContent = 'Failed to load insight';
-                    insightDeepseek.textContent = 'Failed to load insight';
-                    console.error('Insights error:', error);
-                }
-            }
-
-            function clearInsights() {
-                insightMimo.textContent = "Waiting for query...";
-                insightDeepseek.textContent = "Waiting for query...";
+            // Clear Chat
+            document.getElementById('clear-chat-btn').addEventListener('click', () => {
+                chatHistory.innerHTML = `
+                    <div class="welcome-message">
+                        <h2>Welcome to the Meta-Agent</h2>
+                        <p>Select a model and start a conversation. The Meta-Agent synthesizes insights from multiple sub-models.</p>
+                    </div>`;
+                insightMimo.innerHTML = 'Waiting for query...';
+                insightDeepseek.innerHTML = 'Waiting for query...';
                 insightMimo.classList.add('waiting');
                 insightDeepseek.classList.add('waiting');
+            });
+
+            // ============================================
+            // Chat Logic
+            // ============================================
+            function getModelDisplayName() {
+                const value = modelSelect.value;
+                if (value === 'mimo') return 'NorthCode';
+                if (value === 'deepseek') return 'NexAGI';
+                return 'Meta-Agent';
             }
 
-            function addMessage(text, type, senderName = "You", isError = false) {
+            function escapeHtml(text) {
                 const div = document.createElement('div');
-                div.className = `message ${type}${isError ? ' error' : ''}`;
+                div.textContent = text;
+                return div.innerHTML;
+            }
 
-                const header = document.createElement('div');
-                header.className = 'message-header';
-                header.textContent = senderName;
+         // Sanitize backend HTML (Flexmark output) — keeps safe tags, strips dangerous ones
+            function sanitizeHtml(text) {
+                return DOMPurify.sanitize(text, {
+                    ALLOWED_TAGS: ['b','strong','i','em','u','br','p','ul','ol','li',
+                                   'h1','h2','h3','h4','h5','h6','code','pre','blockquote',
+                                   'a','table','thead','tbody','tr','th','td','hr','span'],
+                    ALLOWED_ATTR: ['href', 'alt', 'class', 'target', 'rel']
+                });
+            }
 
-                const content = document.createElement('div');
-                content.className = 'message-content';
-                
-                // For user messages, use textContent to prevent XSS
-                // For AI messages, render HTML for formatting
-                if (type === 'user') {
-                    content.textContent = text;
-                } else {
-                    content.innerHTML = sanitizeHtml(text);
-                }
-
-                div.appendChild(header);
-                div.appendChild(content);
-                chatHistory.appendChild(div);
-
-                const welcome = document.querySelector('.welcome-message');
+            function addMessage(content, type) {
+                const welcome = chatHistory.querySelector('.welcome-message');
                 if (welcome) welcome.remove();
 
-                scrollToBottom();
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${type}`;
+
+                if (type === 'error') {
+                    messageDiv.classList.add('error');
+                    messageDiv.innerHTML = `<div class="message-content">${escapeHtml(content)}</div>`;
+                } else if (type === 'user') {
+                    messageDiv.innerHTML = `<div class="message-content">${escapeHtml(content)}</div>`;
+                } else {
+                    messageDiv.innerHTML = `
+                        <div class="message-header">${getModelDisplayName()}</div>
+                        <div class="message-content">${sanitizeHtml(content)}</div>`;
+                }
+
+                chatHistory.appendChild(messageDiv);
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+                return messageDiv;
             }
 
-            // Sanitize HTML to allow safe tags only
-            function sanitizeHtml(html) {
-                if (!html) return '';
-                
-                // Create a temporary element to parse the HTML
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = html;
-                
-                // List of allowed tags
-                const allowedTags = [
-                    'p', 'br', 'strong', 'b', 'em', 'i', 'u', 's', 'strike',
-                    'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-                    'ul', 'ol', 'li',
-                    'blockquote', 'pre', 'code',
-                    'a', 'span', 'div',
-                    'table', 'thead', 'tbody', 'tr', 'th', 'td',
-                    'hr', 'sub', 'sup', 'mark'
-                ];
-                
-                // List of allowed attributes
-                const allowedAttrs = ['href', 'target', 'rel', 'class'];
-                
-                function cleanNode(node) {
-                    if (node.nodeType === Node.TEXT_NODE) {
-                        return node.cloneNode();
-                    }
-                    
-                    if (node.nodeType !== Node.ELEMENT_NODE) {
-                        return null;
-                    }
-                    
-                    const tagName = node.tagName.toLowerCase();
-                    
-                    if (!allowedTags.includes(tagName)) {
-                        // If tag not allowed, just return text content
-                        const fragment = document.createDocumentFragment();
-                        for (const child of node.childNodes) {
-                            const cleanedChild = cleanNode(child);
-                            if (cleanedChild) fragment.appendChild(cleanedChild);
-                        }
-                        return fragment;
-                    }
-                    
-                    const cleanedElement = document.createElement(tagName);
-                    
-                    // Copy allowed attributes
-                    for (const attr of allowedAttrs) {
-                        if (node.hasAttribute(attr)) {
-                            let value = node.getAttribute(attr);
-                            // For href, ensure it's not javascript:
-                            if (attr === 'href' && value.toLowerCase().startsWith('javascript:')) {
-                                continue;
-                            }
-                            cleanedElement.setAttribute(attr, value);
-                        }
-                    }
-                    
-                    // For links, add security attributes
-                    if (tagName === 'a') {
-                        cleanedElement.setAttribute('target', '_blank');
-                        cleanedElement.setAttribute('rel', 'noopener noreferrer');
-                    }
-                    
-                    // Recursively clean children
-                    for (const child of node.childNodes) {
-                        const cleanedChild = cleanNode(child);
-                        if (cleanedChild) cleanedElement.appendChild(cleanedChild);
-                    }
-                    
-                    return cleanedElement;
-                }
-                
-                const cleanedFragment = document.createDocumentFragment();
-                for (const child of tempDiv.childNodes) {
-                    const cleanedChild = cleanNode(child);
-                    if (cleanedChild) cleanedFragment.appendChild(cleanedChild);
-                }
-                
-                const resultDiv = document.createElement('div');
-                resultDiv.appendChild(cleanedFragment);
-                return resultDiv.innerHTML;
-            }
-
-            function addThinkingMessage() {
-                const id = 'loading-' + Date.now();
-                const div = document.createElement('div');
-                div.id = id;
-                div.className = 'message ai';
-                
-                div.innerHTML = `
-                    <div class="message-header">AI is thinking...</div>
+            function addThinkingIndicator() {
+                const thinkingDiv = document.createElement('div');
+                thinkingDiv.className = 'message ai thinking';
+                thinkingDiv.innerHTML = `
                     <div class="thinking-container">
-                        <span class="thinking-brain">🧠</span>
-                        <div class="thinking-dots">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-                        <span class="thinking-text">Processing your request...</span>
+                        <div class="thinking-brain">🧠</div>
+                        <div class="thinking-dots"><span></span><span></span><span></span></div>
+                        <span class="thinking-text pulse-text">Analyzing...</span>
                         <div class="neural-network">
                             <div class="neural-node"></div>
                             <div class="neural-node"></div>
@@ -2771,54 +2052,93 @@
                             <div class="neural-node"></div>
                             <div class="neural-node"></div>
                         </div>
-                    </div>
-                `;
-                
-                chatHistory.appendChild(div);
-                scrollToBottom();
-                
-                return id;
+                    </div>`;
+                chatHistory.appendChild(thinkingDiv);
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+                return thinkingDiv;
             }
 
-            function removeMessage(id) {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.style.animation = 'fadeOut 0.3s ease forwards';
-                    setTimeout(() => el.remove(), 300);
+            function setLoading(loading) {
+                sendBtn.disabled = loading;
+                userInput.disabled = loading;
+                document.getElementById('input-area').classList.toggle('disabled', loading);
+                document.getElementById('input-wrapper').classList.toggle('disabled', loading);
+            }
+
+            async function queryEndpoint(url, message) {
+                const response = await fetch(url + encodeURIComponent(message));
+                const rawText = await response.text();
+                if (!response.ok) {
+                    throw new Error(parseResponse(rawText) || `Request failed (${response.status})`);
+                }
+                return parseResponse(rawText);
+            }
+
+            async function sendMessage() {
+                const message = userInput.value.trim();
+                if (!message) return;
+
+                addMessage(message, 'user');
+                userInput.value = '';
+                userInput.style.height = 'auto';
+                setLoading(true);
+
+                const selectedModel = modelSelect.value;
+                const thinking = addThinkingIndicator();
+
+                try {
+                    if (selectedModel === 'nvidia') {
+                        // Meta-Agent: fetch both insights and final response in parallel
+                    	// Meta-Agent: call ONLY /api/nvidia/ —
+                        // the backend internally fetches both models itself.
+                        // NO separate insight calls here (that was causing duplicates!)
+                        insightMimo.textContent = 'Synthesized by Meta-Agent';
+                        insightDeepseek.textContent = 'Synthesized by Meta-Agent';
+                        insightMimo.classList.remove('waiting');
+                        insightDeepseek.classList.remove('waiting');
+
+                        const response = await queryEndpoint(API_CONFIG.endpoints.nvidia, message);
+                        thinking.remove();
+                        addMessage(response, 'ai');
+                    } else {
+                        const url = selectedModel === 'mimo'
+                            ? API_CONFIG.endpoints.mimo
+                            : API_CONFIG.endpoints.deepseek;
+                        const response = await queryEndpoint(url, message);
+                        thinking.remove();
+                        addMessage(response, 'ai');
+                    }
+                } catch (error) {
+                    thinking.remove();
+                    addMessage(`Error: ${error.message || 'Unable to reach the server. Please try again.'}`, 'error');
+                } finally {
+                    setLoading(false);
+                    userInput.focus();
                 }
             }
 
-            function scrollToBottom() {
-                chatHistory.scrollTo({
-                    top: chatHistory.scrollHeight,
-                    behavior: 'smooth'
-                });
-            }
+            // Send button & keyboard shortcuts
+            sendBtn.addEventListener('click', sendMessage);
 
-            function getModelDisplayName(model) {
-                switch (model) {
-                    case 'nvidia': return 'Meta-Agent (Nvidia)';
-                    case 'mimo': return 'Mimo';
-                    case 'deepseek': return 'DeepSeek';
-                    default: return 'AI';
+            userInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
                 }
-            }
+            });
+
+            // Auto-resize textarea
+            userInput.addEventListener('input', () => {
+                userInput.style.height = 'auto';
+                userInput.style.height = Math.min(userInput.scrollHeight, 120) + 'px';
+            });
+
+            // Initialize meta panel state
+            metaPanel.classList.remove('disabled');
         });
-
-        // Add animations
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fadeOut {
-                from { opacity: 1; transform: translateY(0); }
-                to { opacity: 0; transform: translateY(-10px); }
-            }
-            @keyframes messageSlideOut {
-                from { opacity: 1; transform: translateX(0) scale(1); }
-                to { opacity: 0; transform: translateX(100px) scale(0.8); }
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
-
 </html>
+
+
+
