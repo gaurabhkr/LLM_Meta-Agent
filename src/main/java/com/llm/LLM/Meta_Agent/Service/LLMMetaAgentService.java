@@ -34,7 +34,7 @@ public class LLMMetaAgentService {
 	private final HtmlRenderer renderer;
 	
 	private ChatClient NvidiaChatClient;
-	private ChatClient NexAgiChatClient;
+	private ChatClient RecursiveFlintChatClient;
 	private ChatClient NorthCodeChatClient;
 	
 	private String FirstModelResponse;
@@ -44,7 +44,7 @@ public class LLMMetaAgentService {
 	private Resource preprompt;
 	
 	public LLMMetaAgentService( 
-			@Qualifier("northcode") ChatModel NorthCodeChatModel,@Qualifier("nexagi") ChatModel GemmaChatModel,
+			@Qualifier("northcode") ChatModel NorthCodeChatModel,@Qualifier("recursiveflint") ChatModel RecursiveFlintChatModel,
 			@Qualifier("nvidia") ChatModel NvidiaChatModel, ChatMemory chatMemory){
 
 		
@@ -53,7 +53,7 @@ public class LLMMetaAgentService {
 				.build();
 		
 		
-		this.NexAgiChatClient=ChatClient.create(GemmaChatModel);
+		this.RecursiveFlintChatClient=ChatClient.create(RecursiveFlintChatModel);
 		this.NvidiaChatClient=ChatClient.create(NvidiaChatModel);
 		
 		
@@ -69,14 +69,14 @@ public class LLMMetaAgentService {
 	
 	
 	//NexAGI Model Response will return
-	public String nexagianswer(@PathVariable String message){
-		String response=NexAgiChatClient
+	public String recursiveflintanswer(@PathVariable String message){
+		String response=RecursiveFlintChatClient
 				.prompt(message)
 				.call()
 				.content();
 		response=renderer.render(parser.parse(response));
 		
-		System.out.println("\n-----Nex Agi Response-----");System.out.println(response);
+		System.out.println("\n-----Recursive Flint Response-----");System.out.println(response);
 		return response;
 	}
 	
@@ -101,7 +101,7 @@ public class LLMMetaAgentService {
 	//When n(message)--ThinkingMachine response will not shown , NorthCode response not shownn both have same message
 	public String nvidiaanswer(@PathVariable String message,Authentication auth){
 		
-		CompletableFuture<String> nexagi=CompletableFuture.supplyAsync(()->nexagianswer(message));
+		CompletableFuture<String> nexagi=CompletableFuture.supplyAsync(()->recursiveflintanswer(message));
 		CompletableFuture<String> northcode=CompletableFuture.supplyAsync(()->northcodeanswer(message,auth));
 		CompletableFuture.allOf(nexagi,northcode).join();
 

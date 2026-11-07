@@ -22,11 +22,11 @@ public class LLMMetaAgentConfiguration {
 	}
 	
 	@Bean
-	@Qualifier("nexagi")
+	@Qualifier("recursiveflint")
 	public OpenAiChatModel nexagimodel() {
 		
 		//Making option for custom model and openaiapi they will make an openaichatmodel which is load into chatclient
-		var options=OpenAiChatOptions.builder().model("nex-agi/nex-n2.5-pro:free").build();
+		var options=OpenAiChatOptions.builder().model("recursive/flint-v1.0:free").build();
 		var openaiapi=OpenAiApi.builder().apiKey(API_KEY).baseUrl(BASE_URL).build();
 		
 		return OpenAiChatModel
@@ -56,7 +56,7 @@ public class LLMMetaAgentConfiguration {
 	@Qualifier("nvidia")
 	public OpenAiChatModel nvidiamodel() {
 		
-		var options=OpenAiChatOptions.builder().model("nvidia/nemotron-3-ultra-550b-a55b:free").build();
+		var options=OpenAiChatOptions.builder().model("nvidia/nemotron-3.5-super-vl:free").build();
 		var openaiapi=OpenAiApi.builder().apiKey(API_KEY).baseUrl(BASE_URL).build();
 		
 		return OpenAiChatModel

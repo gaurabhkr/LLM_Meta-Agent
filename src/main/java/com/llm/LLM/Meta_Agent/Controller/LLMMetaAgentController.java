@@ -1,11 +1,15 @@
 package com.llm.LLM.Meta_Agent.Controller;
 
+import org.springframework.ai.retry.NonTransientAiException; 
+import org.springframework.ai.retry.TransientAiException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,9 +40,9 @@ public class LLMMetaAgentController {
 	
 	//Gemma Model Response will return
 	@ResponseBody
-	@GetMapping("/nexagi/{message}")
+	@GetMapping("/recursiveflint/{message}")
 	public ResponseEntity<String> nexagianswer(@PathVariable String message){
-		String response=llmMetaAgentService.nexagianswer(message);
+		String response=llmMetaAgentService.recursiveflintanswer(message);
 		return ResponseEntity.ok(response);
 	}
 	
@@ -100,5 +104,16 @@ public class LLMMetaAgentController {
 	@GetMapping("/")
 	public String hom() {
 		return "forward:/index.html";
+	}
+	
+	@ExceptionHandler
+	public ResponseEntity<String> handleTransient(TransientAiException ex){
+		return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+				.body("Model Service is temporarily unavailable. Please try again.");
+	}
+	@ExceptionHandler
+	public ResponseEntity<String> handleNonTransient(NonTransientAiException ex){
+		return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+				.body("Model request failed. Contact admin @gaurabhkr. ");
 	}
 }
