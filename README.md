@@ -66,6 +66,65 @@ flowchart TD
 
 ---
 
+## 💡 Example Query & Synthesis Walkthrough
+
+To see why synthesis produces a superior answer compared to querying a single model, consider this real-world example:
+
+> **User Query:** *"Compare Apache Kafka vs RabbitMQ for an event-driven financial transaction pipeline."*
+
+````carousel
+```markdown
+### 1️⃣ Sub-Model A: RecursiveFlint (Deep Analytical Reasoning)
+Focuses on throughput, log-structured storage, and retention:
+- Highlights Kafka's distributed commit log, sequential disk I/O, and partitioned consumer groups.
+- Analyzes durability: replica sets, `acks=all`, and zero data loss on broker crashes.
+- Identifies limitations: Partition rebalancing overhead and operational complexity for small message volumes.
+```
+<!-- slide -->
+```markdown
+### 2️⃣ Sub-Model B: NorthCode (Precise Implementation & Protocol Context)
+Focuses on protocol mechanics, routing topologies, and code contracts:
+- Emphasizes RabbitMQ's AMQP 0-9-1 flexibility: exchange bindings (topic, direct, headers), DLQs, and manual acks.
+- Notes RabbitMQ memory consumption bottlenecks when millions of messages queue up.
+- Highlights exact Java/Spring AMQP template vs Spring Kafka consumer listener configurations.
+```
+<!-- slide -->
+```markdown
+### 3️⃣ Meta-Agent: Nvidia Nemotron (Final Synthesized Output)
+Merges analytical depth with implementation precision, eliminating duplication:
+- **Decision Matrix**: Structured trade-off comparison (Throughput vs Flexible Routing).
+- **Architecture Recommendation**: Recommends Kafka for immutable transaction audit trails and event replay, and RabbitMQ for discrete payment routing/commands requiring complex routing keys.
+- **Unified Summary**: A clean, balanced answer without robotic "Model 1 said / Model 2 said" preamble.
+```
+````
+
+---
+
+## 📂 Project Structure
+
+```text
+LLM-Meta-Agent/
+├── .github/                         # Repository templates & CI configuration
+├── docs/assets/screenshots/         # Terminal console UI screenshots & assets
+├── src/
+│   ├── main/
+│   │   ├── java/com/llm/LLM/Meta_Agent/
+│   │   │   ├── Configuration/       # Beans, OpenAiChatModel qualifiers, ChatMemory, Security
+│   │   │   ├── Controller/          # REST endpoints (/api/nvidia, /api/recursiveflint, etc.)
+│   │   │   ├── Service/             # Multi-agent async orchestrator & JWT generator
+│   │   │   └── LlmMetaAgentApplication.java
+│   │   └── resources/
+│   │       ├── static/              # Terminal Console & Auth UI (index.html, login.html)
+│   │       ├── Preprompt            # Externalized synthesis prompt rules & constraints
+│   │       └── application.properties
+│   └── test/                        # Context load unit test suite
+├── Dockerfile                       # Multi-stage container build definition
+├── pom.xml                          # Maven dependencies (Spring AI 1.1.2, JJWT, etc.)
+└── README.md                        # Project documentation
+```
+
+---
+
 ## 🛠️ Technology Stack
 
 | Category | Technologies |

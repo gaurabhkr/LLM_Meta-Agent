@@ -35,6 +35,10 @@ build/
 ### Test files ###
 test.html
 logintest.html
+src/main/resources/static/test.html
+src/main/resources/static/logintest.html
 
 ### Agent documentation ###
 agent.md
+AGENTS.md
+[aA][gG][eE][nN][tT][sS].md
