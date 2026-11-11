@@ -42,12 +42,12 @@ Experience the application live: **[https://llm-meta-agent.onrender.com/](https:
 ## 🏗️ System Architecture
 
 ```mermaid
-graph TD
-    A[User Query via Web UI / REST API] --> B[Spring Security & JwtAuthenticationFilter]
-    B --> C[LLMMetaAgentController]
-    C --> D[LLMMetaAgentService]
+flowchart TD
+    A["User Query via Web UI / REST API"] --> B["Spring Security and JwtAuthenticationFilter"]
+    B --> C["LLMMetaAgentController"]
+    C --> D["LLMMetaAgentService"]
     
-    subgraph Parallel Sub-Agent Fetch (CompletableFuture)
+    subgraph ParallelExecution ["Parallel Sub-Agent Fetch (CompletableFuture)"]
         D -->|Async Request 1| E["RecursiveFlint (recursive/flint-v1.0:free)"]
         D -->|Async Request 2| F["NorthCode (cohere/north-mini-code:free)"]
     end
@@ -55,8 +55,8 @@ graph TD
     E -->|First Model Response| H["Nvidia Nemotron (nvidia/nemotron-3.5-super-vl:free)"]
     F -->|Second Model Response| H
     
-    H -->|System Preprompt + Synthesized Prompt| I[Final Synthesized Answer]
-    I --> J[Terminal Console UI]
+    H -->|System Preprompt + Synthesized Prompt| I["Final Synthesized Answer"]
+    I --> J["Terminal Console UI"]
 ```
 
 ### Architectural Highlights
