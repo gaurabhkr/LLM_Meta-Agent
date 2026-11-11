@@ -35,3 +35,6 @@ build/
 ### Test files ###
 test.html
 logintest.html
+
+### Agent documentation ###
+agent.md
