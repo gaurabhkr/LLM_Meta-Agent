@@ -87,6 +87,7 @@ public class LLMMetaAgentService {
 		String response=NorthCodeChatClient
 				.prompt()
 				.user(message)
+				.tools()
 				.advisors(a->a.param(ChatMemory.CONVERSATION_ID,auth.getName()))
 				.call()
 				.content();

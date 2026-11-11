@@ -1,26 +1,41 @@
 # 🧠 LLM Meta-Agent
 
-An advanced AI system that combines the power of multiple language models to deliver superior, well-rounded, and synthesized responses. It uses a primary LLM (Nvidia Nemotron) as its central brain to autonomously synthesize insights from specialized underlying AI models (NexAGI and NorthCode).
+An advanced multi-agent AI system built with **Spring Boot 3.5.9 (Java 21)** and **Spring AI 1.1.2**. It coordinates and queries two specialized underlying models (**RecursiveFlint / NexAGI** and **NorthCode**) concurrently, then synthesizes a superior, unified response using **Nvidia Nemotron** as the central synthesis engine.
+
+Features a responsive, retro-futuristic **Terminal console UI** with JWT-backed stateless authentication, per-user conversational memory, and real-time model inspection.
 
 ![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.9-brightgreen?logo=springboot) ![Spring AI](https://img.shields.io/badge/Spring%20AI-1.1.2-blue) ![Security](https://img.shields.io/badge/Security-JWT%20%2B%20Spring%20Security-red) ![License](https://img.shields.io/badge/License-MIT-blue)
 
 ---
 
+## 📸 Screenshots
+
+| Sign-in Console (Terminal Theme) | Meta-Agent Synthesis Console |
+| :---: | :---: |
+| <img src="./docs/assets/screenshots/login-screen.png" width="450" alt="Sign-in Console" /> | <img src="./docs/assets/screenshots/meta-agent-console.png" width="450" alt="Meta-Agent Console" /> |
+
+| Interactive Model Picker | Direct Model Inspection (RecursiveFlint) |
+| :---: | :---: |
+| <img src="./docs/assets/screenshots/model-picker.png" width="450" alt="Model Picker" /> | <img src="./docs/assets/screenshots/recursive-flint-mode.png" width="450" alt="RecursiveFlint Mode" /> |
+
+---
+
 ## ✨ Key Features
 
-- **🔄 Multi-Model Intelligence & Synthesis**: Concurrently queries **NexAGI** and **NorthCode** models and synthesizes their outputs using **Nvidia Nemotron** into a single, cohesive answer.
-- **⚡ Asynchronous Concurrent Execution**: Utilizes `CompletableFuture` to fetch initial model responses in parallel, drastically reducing overall latency.
-- **🔐 JWT Stateless Authentication**: Secure login flow using JWT stored in `HttpOnly` cookies, integrated with Spring Security.
-- **🧠 Short Memory / Chat Advisor**: Retains conversational context across interactions per authenticated session using Spring AI `ChatMemory`.
-- **📊 Real-time Model Insights**: Transparently inspect individual sub-model responses (`/api/nvidia/firstmodelresponse` & `/api/nvidia/secondmodelresponse`).
-- **📝 Preprompt Externalization**: Externalized prompt template (`classpath:Preprompt`) to maintain prompt clarity and facilitate easy tuning.
+- **🔄 Multi-Model Parallel Synthesis**: Concurrently queries **RecursiveFlint** (`recursive/flint-v1.0:free`) and **NorthCode** (`cohere/north-mini-code:free`), then synthesizes a cohesive final response via **Nvidia Nemotron** (`nvidia/nemotron-3.5-super-vl:free`).
+- **⚡ Asynchronous Execution**: Powered by `CompletableFuture` to fetch sub-model responses in parallel, dramatically cutting end-to-end response latency.
+- **🔐 JWT Stateless Authentication**: Robust user authentication with JWT stored in secure `HttpOnly` cookies and managed by Spring Security filters.
+- **🧠 Short-Term Chat Memory**: Per-user conversational context tracking using Spring AI `MessageWindowChatMemory` (supports contextual multi-turn conversation).
+- **🖥️ Phosphor Terminal UI**: Lightweight single-page interface with Martian Mono typography, real-time typewriter and streaming animations, and zero external frontend build step.
+- **📊 Real-time Model Insights**: Transparently inspect sub-model intermediate outputs via `/api/nvidia/firstmodelresponse` and `/api/nvidia/secondmodelresponse` or the UI synthesis drawer.
+- **📝 Externalized Preprompt**: Synthesis prompt rules cleanly decoupled in `classpath:Preprompt` for rapid experimentation and prompt tuning.
 
 ---
 
 ## 🌐 Live Demo
 
 Experience the application live: **[https://llm-meta-agent.onrender.com/](https://llm-meta-agent.onrender.com/)**  
-*(Note: Initial load may take a minute on the free tier)*
+*(Note: Initial spin-up may take ~60 seconds on free tier hosting).*
 
 ---
 
@@ -28,26 +43,59 @@ Experience the application live: **[https://llm-meta-agent.onrender.com/](https:
 
 ```mermaid
 graph TD
-    A[User Query via Web UI / API] --> B[Spring Security / JWT Auth Filter]
+    A[User Query via Web UI / REST API] --> B[Spring Security & JwtAuthenticationFilter]
     B --> C[LLMMetaAgentController]
     C --> D[LLMMetaAgentService]
     
-    subgraph Parallel Execution - CompletableFuture
-        D -->|Async Request| E[NexAGI Model: nex-agi/nex-n2.5-pro:free]
-        D -->|Async Request| F[NorthCode Model: cohere/north-mini-code:free]
+    subgraph Parallel Sub-Agent Fetch (CompletableFuture)
+        D -->|Async Request 1| E["RecursiveFlint (recursive/flint-v1.0:free)"]
+        D -->|Async Request 2| F["NorthCode (cohere/north-mini-code:free)"]
     end
     
-    E -->|First Response| H[Nvidia Meta-Agent: nvidia/nemotron-3-ultra-550b-a55b:free]
-    F -->|Second Response| H
+    E -->|First Model Response| H["Nvidia Nemotron (nvidia/nemotron-3.5-super-vl:free)"]
+    F -->|Second Model Response| H
     
-    H -->|System Preprompt + Synthesized Prompt| I[Final Synthesized Response]
-    I --> J[User Web Interface]
+    H -->|System Preprompt + Synthesized Prompt| I[Final Synthesized Answer]
+    I --> J[Terminal Console UI]
 ```
 
-### Architecture Highlights
-1. **Parallel Execution**: Both sub-agent calls run asynchronously using `CompletableFuture.supplyAsync()`.
-2. **Context Window Memory**: NorthCode model leverages `MessageWindowChatMemory` scoped per authenticated user session.
-3. **Synthesis Engine**: Nvidia Nemotron prompt combines the user query and both model outputs with externalized `Preprompt` rules.
+### Architectural Highlights
+1. **Parallel Execution**: Both sub-agent calls run concurrently with `CompletableFuture.supplyAsync()`.
+2. **Context Window Memory**: NorthCode retains dialogue context across turns with `MessageWindowChatMemory` keyed by authenticated username.
+3. **Synthesis Engine**: Nvidia Nemotron receives the original user request alongside both model outputs and synthesizes them based on instructions in `Preprompt`.
+
+---
+
+## 🛠️ Technology Stack
+
+| Category | Technologies |
+| :--- | :--- |
+| **Backend & Core** | `Java 21` • `Spring Boot 3.5.9` • `Spring AI 1.1.2` • `Maven` |
+| **Security & Auth** | `Spring Security 6` • `JJWT (io.jsonwebtoken 0.12.6)` • `HttpOnly Cookies` |
+| **AI Integration** | `OpenRouter API` (OpenAI-compatible client via Spring AI) |
+| **Models** | • **Meta-Agent**: `nvidia/nemotron-3.5-super-vl:free`<br>• **Sub-Model A**: `recursive/flint-v1.0:free`<br>• **Sub-Model B**: `cohere/north-mini-code:free` |
+| **Frontend** | Static HTML5, CSS custom properties (`oklch`), vanilla JS, DOMPurify, GSAP, Three.js |
+
+---
+
+## 🔌 API Endpoints
+
+### 🔑 Authentication Endpoints
+
+| Method | Endpoint | Description | Access |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/login` | Authenticates user credentials, issues JWT via `HttpOnly` cookie | Public |
+| `GET` | `/api/logout` | Clears authentication cookie and redirects to `/login.html` | Public |
+
+### 🤖 AI Agent Endpoints
+
+| Method | Endpoint | Description | Access |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/nvidia/{message}` | Meta-Agent query (Parallel sub-model fetch + Nvidia synthesis) | Authenticated |
+| `GET` | `/api/recursiveflint/{message}` | Direct query to RecursiveFlint model | Authenticated |
+| `GET` | `/api/northcode/{message}` | Direct query to NorthCode model (with chat memory) | Authenticated |
+| `GET` | `/api/nvidia/firstmodelresponse` | Retrieve the RecursiveFlint response from the latest synthesis query | Authenticated |
+| `GET` | `/api/nvidia/secondmodelresponse` | Retrieve the NorthCode response from the latest synthesis query | Authenticated |
 
 ---
 
@@ -56,8 +104,8 @@ graph TD
 ### Prerequisites
 
 - **Java 21** or higher
-- **Maven** (or use the included `mvnw` wrapper)
-- **OpenRouter API Key** (Provides access to NexAGI, NorthCode, and Nvidia models)
+- **Maven** (or use the provided wrapper `mvnw` / `mvnw.cmd`)
+- **OpenRouter API Key** ([openrouter.ai](https://openrouter.ai/))
 
 ### Installation & Setup
 
@@ -67,98 +115,81 @@ graph TD
    cd LLM-Meta-Agent
    ```
 
-2. **Configure API Keys**
+2. **Configure Environment Variables**
 
-   Set your OpenRouter API key as an environment variable or inside `application.properties`:
+   Set your OpenRouter credentials before starting:
    ```bash
-   export SPRING_AI_OPENAI_API_KEY=your_openrouter_api_key_here
-   export SPRING_AI_OPENAI_BASE_URL=https://openrouter.ai/api/v1
+   # Linux / macOS
+   export SPRING_OPENAI_API_KEY=sk-or-v1-...
+   export SPRING_OPENAI_BASE_URL=https://openrouter.ai/api/v1
+   ```
+   ```powershell
+   # Windows PowerShell
+   $env:SPRING_OPENAI_API_KEY="sk-or-v1-..."
+   $env:SPRING_OPENAI_BASE_URL="https://openrouter.ai/api/v1"
    ```
 
 3. **Build & Run the Application**
-   
-   On Linux/macOS:
+
+   On Linux / macOS:
    ```bash
    ./mvnw spring-boot:run
    ```
-   
+
    On Windows:
    ```cmd
    mvnw.cmd spring-boot:run
    ```
 
-4. **Access the Application**
-   - **Login Page**: `http://localhost:8080/login.html`
-   - **Default Credentials**:
+4. **Access the Console**
+   - **Login Page**: [http://localhost:8080/login.html](http://localhost:8080/login.html)
+   - **Console UI**: [http://localhost:8080/](http://localhost:8080/)
+   - **Default Credentials (Development)**:
      - Username: `user` | Password: `user`
      - Username: `admin` | Password: `admin`
 
 ---
 
-## 🛠️ Technology Stack
+## 🐳 Docker Deployment
 
-| Category | Core Technologies |
-| :--- | :--- |
-| **Backend & Core** | `Java 21` • `Spring Boot 3.5.9` • `Spring AI 1.1.2` • `Maven` |
-| **Security & Auth** | `Spring Security` • `JJWT 0.12.6` • `HttpOnly Cookies` |
-| **AI Models (OpenRouter)** | `NexAGI (nex-agi/nex-n2.5-pro)` • `NorthCode (cohere/north-mini-code)` • `Nvidia Meta-Agent (nvidia/nemotron-3-ultra-550b)` |
+You can build and run the containerized application using Docker:
 
----
+```bash
+# Build the JAR
+mvn clean package -DskipTests
 
-## 🔌 API Endpoints
+# Build Docker image
+docker build -t llm-meta-agent .
 
-### 🔑 Authentication Endpoints
-
-| Method | Endpoint | Description | Public / Auth |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/login` | Authenticate user, generate JWT, and set `HttpOnly` cookie | Public |
-| `GET` | `/api/logout` | Clear JWT cookie and redirect to login page | Public |
-
-### 🤖 AI Agent Endpoints
-
-| Method | Endpoint | Description | Public / Auth |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/api/nvidia/{message}` | Main Meta-Agent query (Synthesizes responses concurrently) | Authenticated |
-| `GET` | `/api/nexagi/{message}` | Query NexAGI model directly | Authenticated |
-| `GET` | `/api/northcode/{message}` | Query NorthCode model directly (with memory support) | Authenticated |
-| `GET` | `/api/nvidia/firstmodelresponse` | Retrieve NexAGI response from the latest Meta-Agent query | Authenticated |
-| `GET` | `/api/nvidia/secondmodelresponse` | Retrieve NorthCode response from the latest Meta-Agent query | Authenticated |
-
----
-
-## 🌟 Key Updates & Improvements
-
-- **⚡ Service Architecture & Clean Code**: Decoupled business and AI logic from controllers into `@Service` classes.
-- **🔐 JWT Authentication Flow**: Stateless security using `JwtAuthenticationFilter`, `LLMMetaAgentJwtService`, and `HttpOnly` cookies.
-- **⚡ Latency Reduction**: Asynchronous sub-model fetching using `CompletableFuture.allOf()`.
-- **🔄 Model Updates**: Upgraded AI configurations to active OpenRouter endpoints (`nex-agi`, `cohere/north-mini-code`, and `nvidia/nemotron-3-ultra-550b`).
-- **📝 Externalized Prompts**: System preprompts loaded dynamically from `classpath:Preprompt`.
-- **💬 Short-Term Memory**: Session-aware chat history management using `MessageWindowChatMemory`.
+# Run container
+docker run -p 8080:8080 \
+  -e SPRING_OPENAI_API_KEY="your_api_key" \
+  -e SPRING_OPENAI_BASE_URL="https://openrouter.ai/api/v1" \
+  llm-meta-agent
+```
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions, bug reports, and suggestions are welcome!
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/NewFeature`)
+3. Commit your Changes (`git commit -m 'Add NewFeature'`)
+4. Push to the Branch (`git push origin feature/NewFeature`)
 5. Open a Pull Request
 
 ---
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the `LICENSE` file for details.
+Distributed under the MIT License. See [`LICENSE`](file:///d:/Projects/Spring/LLM-Meta-Agent/LICENSE) for more information.
 
 ---
 
 ## 👤 Author
 
-**Gaurabh** - [@gaurabhkr](https://github.com/gaurabhkr)
+**Gaurabh** — [@gaurabhkr](https://github.com/gaurabhkr)
 
-⭐ *If you find this project useful, please consider giving it a star!*
-
-
+⭐ *If you like this project, please star the repository!*

@@ -1,11 +1,14 @@
 package com.llm.LLM.Meta_Agent.Configuration;
 
+import org.jsoup.Jsoup;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.model.openai.autoconfigure.OpenAiConnectionProperties;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.api.OpenAiApi;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -66,6 +69,7 @@ public class LLMMetaAgentConfiguration {
 				.build();
 
 	}
+	
 	
 	@Bean
 	public ChatMemory chatMemory() {
